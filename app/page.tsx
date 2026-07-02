@@ -865,21 +865,6 @@ export default function Home() {
     }
   });
 
-  // Handle Navbar hide/show on scroll direction change
-  useEffect(() => {
-    const handleScrollDir = () => {
-      const currentScrollY = window.scrollY;
-      if (currentScrollY > lastScrollY && currentScrollY > 120) {
-        setShowNavbar(false);
-      } else {
-        setShowNavbar(true);
-      }
-      setLastScrollY(currentScrollY);
-    };
-
-    window.addEventListener("scroll", handleScrollDir, { passive: true });
-    return () => window.removeEventListener("scroll", handleScrollDir);
-  }, [lastScrollY]);
 
   // Preload all 120 images
   useEffect(() => {
@@ -1183,7 +1168,7 @@ export default function Home() {
       {/* 2. Glassmorphic Apple-style Navbar */}
       <motion.nav
         initial={{ y: -100 }}
-        animate={{ y: showNavbar ? 0 : -100 }}
+        animate={{ y: 0 }}
         transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
         className="fixed top-0 left-0 w-full z-40 px-6 py-4 md:px-12 flex justify-between items-center transition-all duration-300 border-b border-white/[0.03] backdrop-blur-md bg-black/10"
       >
