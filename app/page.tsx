@@ -3,7 +3,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import { motion, AnimatePresence, useScroll, useTransform, useMotionValueEvent } from "framer-motion";
 import { 
-  Volume2, VolumeX, Compass, ChevronDown, Activity, Layers, Disc, HelpCircle,
+  Volume2, VolumeX, Compass, ChevronDown, ChevronLeft, ChevronRight, Activity, Layers, Disc, HelpCircle,
   Calendar, Clock, Trophy, Phone, Shield, ExternalLink, Zap, Users, Info, X, 
   MapPin, Gamepad2, Award, Palette, Music, CircleDot, MessageSquare
 } from "lucide-react";
@@ -786,6 +786,58 @@ const EVENTS_DATA = [
   }
 ];
 
+const CATEGORIES_LIST = [
+  {
+    id: "stage-theater",
+    title: "Stage & Theater",
+    subtitle: "Pillai Quad",
+    image: "https://images.unsplash.com/photo-1507676184212-d03ab07a01bf?q=80&w=800&auto=format&fit=crop",
+    desc: "Grand stage performances, dance battles, and fashion showcases."
+  },
+  {
+    id: "vocal-beats",
+    title: "Vocal & Beats",
+    subtitle: "Auditorium",
+    image: "https://images.unsplash.com/photo-1511671782779-c97d3d27a1d4?q=80&w=800&auto=format&fit=crop",
+    desc: "Solo & duet singing, high energy rapping battles, and DJ face-offs."
+  },
+  {
+    id: "outdoor-athletics",
+    title: "Outdoor Athletics",
+    subtitle: "Festival Ground",
+    image: "https://images.unsplash.com/photo-1508098682722-e99c43a406b2?q=80&w=800&auto=format&fit=crop",
+    desc: "Football, Badminton, Sprint runs, Kabaddi, Volleyball, and Cricket."
+  },
+  {
+    id: "indoor-battles",
+    title: "Indoor Battles",
+    subtitle: "Gymkhana",
+    image: "https://images.unsplash.com/photo-1541534741688-6078c6bfb5c5?q=80&w=800&auto=format&fit=crop",
+    desc: "Power deadlifts, benchpress, chess, carrom, and table tennis."
+  },
+  {
+    id: "esports",
+    title: "Esports Arena",
+    subtitle: "PC Gaming Lab",
+    image: "https://images.unsplash.com/photo-1542751371-adc38448a05e?q=80&w=800&auto=format&fit=crop",
+    desc: "High stakes competitive gaming in BGMI, Valorant, and FreeFire."
+  },
+  {
+    id: "casual-gaming",
+    title: "Casual Gaming",
+    subtitle: "Mobile Hub",
+    image: "https://images.unsplash.com/photo-1612287230202-1bf1d85d1bdf?q=80&w=800&auto=format&fit=crop",
+    desc: "Fun, engaging battles in Ludo King, UNO Mobile, Stumble Guys, and 2048."
+  },
+  {
+    id: "creative-canvas",
+    title: "Creative Canvas",
+    subtitle: "PHCOA Floors",
+    image: "https://images.unsplash.com/photo-1460661419201-fd4cecdf8a8b?q=80&w=800&auto=format&fit=crop",
+    desc: "Traditional rangoli, mehandi design, and glass painting."
+  }
+];
+
 export default function Home() {
   const containerRef = useRef<HTMLDivElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
@@ -810,6 +862,7 @@ export default function Home() {
   const [showCategories, setShowCategories] = useState(true);
   const [showRegForm, setShowRegForm] = useState(false);
   const [afterMovieYear, setAfterMovieYear] = useState<"2025" | "2024" | "2023">("2025");
+  const [categoryIndex, setCategoryIndex] = useState(0);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
@@ -823,6 +876,27 @@ export default function Home() {
       return;
     }
     setRegSubmitted(true);
+  };
+
+  const getFilteredEvents = (catId: string) => {
+    switch (catId) {
+      case "stage-theater":
+        return EVENTS_DATA.filter((ev) => ev.category === "Stage Event" && (ev.id.includes("dance") || ev.id === "fashion-show" || ev.id === "mr-ms-euforia"));
+      case "vocal-beats":
+        return EVENTS_DATA.filter((ev) => ev.category === "Stage Event" && (ev.id === "singing" || ev.id === "rapping" || ev.id === "war-of-dj"));
+      case "outdoor-athletics":
+        return EVENTS_DATA.filter((ev) => ev.category === "Outdoor Sport");
+      case "indoor-battles":
+        return EVENTS_DATA.filter((ev) => ev.category === "Indoor Sport");
+      case "esports":
+        return EVENTS_DATA.filter((ev) => ev.category === "E-Sports" && (ev.id === "bgmi" || ev.id === "valorant" || ev.id === "freefire"));
+      case "casual-gaming":
+        return EVENTS_DATA.filter((ev) => ev.category === "E-Sports" && (ev.id !== "bgmi" && ev.id !== "valorant" && ev.id !== "freefire"));
+      case "creative-canvas":
+        return EVENTS_DATA.filter((ev) => ev.category === "Creative Arts");
+      default:
+        return [];
+    }
   };
 
   // Refs for tracking animation variables inside the rAF loop (to bypass react render lag)
@@ -1103,38 +1177,56 @@ export default function Home() {
             exit={{ opacity: 0, transition: { duration: 1.2, ease: [0.76, 0, 0.24, 1] } }}
             className="fixed inset-0 z-50 flex flex-col items-center justify-center bg-[#050505]"
           >
-            <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,rgba(20,184,166,0.06)_0%,transparent_70%)]" />
+            {/* Background glowing nebulas */}
+            <div className="absolute w-[400px] h-[400px] rounded-full bg-teal-500/5 blur-[150px] animate-[pulse_4s_infinite]" />
+            <div className="absolute w-[300px] h-[300px] rounded-full bg-cyan-500/5 blur-[120px] animate-[pulse_6s_infinite] delay-1000" />
             
             {/* Holographic scanner effect line */}
             <div className="absolute inset-x-0 top-0 h-[2px] bg-gradient-to-r from-transparent via-teal-500/50 to-transparent shadow-[0_0_20px_rgba(20,184,166,0.6)] animate-[scan_3s_ease-in-out_infinite]" />
 
-            <div className="relative flex flex-col items-center max-w-sm px-6 text-center">
+            <div className="relative flex flex-col items-center p-10 rounded-[2.5rem] bg-black/40 border border-white/5 backdrop-blur-xl shadow-[0_0_50px_rgba(0,0,0,0.8)] max-w-sm w-full text-center">
+              {/* Outer rotating ring decoration */}
+              <div className="absolute inset-0 rounded-[2.5rem] border border-dashed border-teal-500/10 animate-[spin_40s_linear_infinite]" style={{ margin: "-12px" }} />
+              
               {/* Circular percentage loader */}
-              <div className="relative w-36 h-36 flex items-center justify-center mb-10">
+              <div className="relative w-36 h-36 flex items-center justify-center mb-8">
+                {/* Slow spinning background dash ring */}
+                <div className="absolute w-40 h-40 rounded-full border border-dashed border-teal-500/20 animate-[spin_20s_linear_infinite]" />
+                
                 <svg className="w-full h-full transform -rotate-90">
+                  <defs>
+                    <linearGradient id="loader-grad" x1="0%" y1="0%" x2="100%" y2="100%">
+                      <stop offset="0%" stopColor="#06b6d4" />
+                      <stop offset="50%" stopColor="#14b8a6" />
+                      <stop offset="100%" stopColor="#10b981" />
+                    </linearGradient>
+                  </defs>
                   <circle
                     cx="72"
                     cy="72"
                     r="64"
-                    className="stroke-teal-950/20 fill-none"
-                    strokeWidth="1.5"
+                    className="stroke-neutral-900 fill-none"
+                    strokeWidth="2"
                   />
                   <motion.circle
                     cx="72"
                     cy="72"
                     r="64"
-                    className="stroke-teal-500 fill-none shadow-lg"
-                    strokeWidth="2"
+                    stroke="url(#loader-grad)"
+                    className="fill-none"
+                    strokeWidth="3.5"
                     strokeDasharray="402"
                     strokeDashoffset={402 - (402 * loadPercentage) / 100}
+                    strokeLinecap="round"
                     transition={{ ease: "easeOut" }}
                   />
                 </svg>
+                
                 <div className="absolute flex flex-col items-center justify-center">
-                  <span className="text-3xl font-syne font-bold tracking-tight text-white glow-teal">
+                  <span className="text-3xl font-syne font-extrabold tracking-tight text-white drop-shadow-[0_0_12px_rgba(20,184,166,0.6)]">
                     {loadPercentage}%
                   </span>
-                  <span className="text-[9px] font-mono text-teal-500/70 tracking-widest uppercase mt-0.5">
+                  <span className="text-[9px] font-mono text-teal-400 tracking-widest uppercase mt-0.5 animate-pulse">
                     Loading
                   </span>
                 </div>
@@ -1144,21 +1236,27 @@ export default function Home() {
               <motion.div
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
-                className="h-10 mb-8"
+                className="space-y-1 mb-6"
               >
-                <p className="text-[11px] font-mono text-teal-400/80 tracking-widest uppercase animate-pulse">
-                  {loadPercentage < 25 && "Initializing holographic matrix..."}
-                  {loadPercentage >= 25 && loadPercentage < 55 && "Mapping stage coordinates..."}
-                  {loadPercentage >= 55 && loadPercentage < 85 && "Synchronizing event database..."}
-                  {loadPercentage >= 85 && "Welcome to Pillai Euforia 2026..."}
+                <h3 className="text-xs font-syne font-bold tracking-[0.25em] text-white uppercase">
+                  Pillai Euforia
+                </h3>
+                <p className="text-[10px] font-mono text-teal-400/80 tracking-widest uppercase h-4">
+                  {loadPercentage < 25 && "Initializing Matrix..."}
+                  {loadPercentage >= 25 && loadPercentage < 55 && "Mapping Arenas..."}
+                  {loadPercentage >= 55 && loadPercentage < 85 && "Connecting Core..."}
+                  {loadPercentage >= 85 && "Welcome to the Decade..."}
                 </p>
-                <p className="text-[9px] font-mono text-neutral-600 mt-1 uppercase">
-                  Data Stream: EUFORIA_INIT_V{loadPercentage}.99
+                <p className="text-[8px] font-mono text-neutral-600 uppercase tracking-wider pt-1">
+                  SYS_STREAM: V{loadPercentage}.09
                 </p>
               </motion.div>
               
-              <div className="w-48 h-[1px] bg-neutral-900 relative">
-                <div className="absolute top-0 left-0 h-full bg-teal-500/30 animate-[loading-bar_2s_infinite]" style={{ width: "30%" }} />
+              <div className="w-32 h-[1px] bg-neutral-900 relative">
+                <div 
+                  className="absolute top-0 left-0 h-full bg-gradient-to-r from-cyan-500 to-teal-500 transition-all duration-300" 
+                  style={{ width: `${loadPercentage}%` }} 
+                />
               </div>
             </div>
           </motion.div>
@@ -1320,12 +1418,6 @@ export default function Home() {
               </div>
             </div>
 
-            <div className="pt-4 flex items-center space-x-4">
-              <span className="text-[10px] font-mono text-teal-500/60 tracking-widest uppercase animate-pulse">
-                SCROLL TO DECONSTRUCT STAGE EVENTS
-              </span>
-              <ChevronDown size={14} className="text-teal-400 animate-bounce" />
-            </div>
           </div>
         </ScrollSection>
 
@@ -1398,7 +1490,7 @@ export default function Home() {
 
         {/* SECTION 3: Unified Events Category Explorer (scroll progress ~55% to ~80%) */}
         <ScrollSection scrollYProgress={scrollYProgress} start={0.58} end={0.78}>
-          <div className="w-full flex flex-col space-y-6 items-center text-center">
+          <div className="w-full flex flex-col space-y-6 items-center text-center max-h-[85vh] overflow-y-auto custom-scrollbar px-2 py-4">
             <div className="max-w-xl flex flex-col space-y-2 text-center items-center">
               <div className="flex items-center space-x-3 text-teal-300 font-syne font-bold text-xs md:text-sm tracking-[0.25em]">
                 <Activity size={14} className="animate-[pulse_1.5s_infinite] text-teal-400" />
@@ -1407,73 +1499,153 @@ export default function Home() {
               
               <h2 className="text-3xl md:text-5xl font-syne font-bold tracking-tight text-white leading-tight animate-[pulse_3s_infinite]">
                 Register <br />
-                <span className="text-transparent bg-clip-text bg-gradient-to-r from-teal-400 to-cyan-300 glow-teal">
+                <span className="text-transparent bg-clip-text bg-gradient-to-r from-teal-400 to-cyan-300 glow-teal font-serif italic">
                   Event
                 </span>
               </h2>
-              
-              <p className="text-xs md:text-sm font-sans text-neutral-300 leading-relaxed">
-                Join the grandest battles of Pillai Euforia 2026. Showcase your talent, outwit your opponents, and claim your share of the prizes.
-              </p>
             </div>
 
-            <div className="space-y-4 w-full flex flex-col items-center">
-              {/* Category selectors */}
-              <div className="flex flex-wrap gap-2 justify-center border-b border-white/5 pb-4 font-mono text-[9px] md:text-xs w-full max-w-2xl">
-                {([
-                  { key: "stage", label: "Stage event" },
-                  { key: "indoor", label: "indoor Event" },
-                  { key: "outdoor", label: "outdoor Event" },
-                  { key: "esports", label: "Esports" }
-                ] as const).map((cat) => (
-                  <button
-                    key={cat.key}
-                    onClick={() => setSportsTab(cat.key)}
-                    className={`px-3 py-1.5 rounded-full border transition-all cursor-pointer uppercase tracking-wider ${
-                      sportsTab === cat.key
-                        ? "bg-teal-500/10 border-teal-400 text-teal-400 shadow-[0_0_15px_rgba(45,212,191,0.2)]"
-                        : "border-neutral-800 text-neutral-400 hover:border-neutral-600 hover:text-white"
-                    }`}
-                  >
-                    {cat.label}
-                  </button>
-                ))}
-              </div>
-
-              {/* Filtered Grid */}
-              <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3 max-h-[36vh] overflow-y-auto pr-2 custom-scrollbar w-full max-w-5xl">
-                {EVENTS_DATA.filter((ev) => {
-                  if (sportsTab === "stage") return ev.category === "Stage Event";
-                  if (sportsTab === "indoor") return ev.category === "Indoor Sport" || ev.category === "Creative Arts";
-                  if (sportsTab === "outdoor") return ev.category === "Outdoor Sport";
-                  if (sportsTab === "esports") return ev.category === "E-Sports";
-                  return false;
-                }).map((ev) => (
-                  <div
-                    key={ev.id}
-                    onClick={() => setSelectedEvent(ev)}
-                    className="glass-panel p-4 rounded-2xl border border-white/[0.04] bg-white/[0.01] hover:bg-white/[0.04] hover:border-teal-500/30 hover:-translate-y-1 transition-all duration-300 cursor-pointer flex flex-col justify-between text-left group"
-                  >
-                    <div>
-                      <div className="flex justify-between items-start mb-2">
-                        {sportsTab === "stage" && <Music size={14} className="text-teal-400/70 group-hover:text-teal-400 transition-colors" />}
-                        {sportsTab === "indoor" && <Award size={14} className="text-teal-400/70 group-hover:text-teal-400 transition-colors" />}
-                        {sportsTab === "outdoor" && <CircleDot size={14} className="text-teal-400/70 group-hover:text-teal-400 transition-colors" />}
-                        {sportsTab === "esports" && <Gamepad2 size={14} className="text-teal-400/70 group-hover:text-teal-400 transition-colors" />}
-                        <span className="text-[9px] font-mono text-neutral-500 uppercase tracking-widest">{sportsTab}</span>
+            {/* Cover-flow Category Slider */}
+            <div className="relative w-full max-w-4xl px-8 flex flex-col items-center select-none">
+              {/* Slider viewport */}
+              <div className="w-full overflow-hidden py-4 flex justify-center items-center">
+                <div 
+                  className="flex gap-4 md:gap-6 transition-transform duration-500 ease-out"
+                  style={{ 
+                    transform: `translateX(calc(50% - 105px - ${categoryIndex * (210 + 24)}px))` 
+                  }}
+                >
+                  {CATEGORIES_LIST.map((cat, idx) => {
+                    const isActive = idx === categoryIndex;
+                    return (
+                      <div
+                        key={cat.id}
+                        onClick={() => {
+                          setCategoryIndex(idx);
+                          setSelectedCategory(cat.id);
+                        }}
+                        className={`relative w-[210px] h-[310px] rounded-2xl overflow-hidden cursor-pointer transition-all duration-500 ease-out flex-shrink-0 flex flex-col justify-end p-4 border ${
+                          isActive
+                            ? "scale-105 border-teal-400/80 shadow-[0_0_30px_rgba(20,184,166,0.25)] z-10"
+                            : "scale-95 border-white/5 opacity-40 grayscale hover:opacity-80"
+                        }`}
+                      >
+                        {/* Background Image */}
+                        <div 
+                          className="absolute inset-0 bg-cover bg-center transition-transform duration-700"
+                          style={{ backgroundImage: `url(${cat.image})` }}
+                        />
+                        {/* Gradient Overlay */}
+                        <div className="absolute inset-0 bg-gradient-to-t from-black via-black/40 to-transparent" />
+                        
+                        {/* Content */}
+                        <div className="relative z-10 space-y-1 text-left">
+                          <span className="text-[9px] font-mono tracking-widest text-teal-400 uppercase">{cat.subtitle}</span>
+                          <h3 className="font-serif italic text-lg md:text-xl font-bold text-white leading-tight">{cat.title}</h3>
+                          
+                          {isActive && (
+                            <div className="w-8 h-[2px] bg-teal-400 mt-1 mb-2" />
+                          )}
+                          
+                          {isActive && (
+                            <p className="text-[10px] text-neutral-300 leading-normal line-clamp-2">{cat.desc}</p>
+                          )}
+                        </div>
                       </div>
-                      <h3 className="font-syne font-bold text-white text-xs md:text-sm line-clamp-1 group-hover:text-teal-300 transition-colors">
-                        {ev.name}
-                      </h3>
-                    </div>
-                    <div className="mt-4 pt-2 border-t border-white/5 flex justify-between items-center text-[10px] font-mono">
-                      <span className="text-neutral-500">FEE:</span>
-                      <span className="text-teal-400 font-bold">{ev.fee}</span>
-                    </div>
-                  </div>
-                ))}
+                    );
+                  })}
+                </div>
               </div>
+
+              {/* Slider Arrows */}
+              <button
+                onClick={(e) => {
+                  e.stopPropagation();
+                  const prevIdx = (categoryIndex - 1 + CATEGORIES_LIST.length) % CATEGORIES_LIST.length;
+                  setCategoryIndex(prevIdx);
+                  setSelectedCategory(CATEGORIES_LIST[prevIdx].id);
+                }}
+                className="absolute left-0 top-[40%] -translate-y-1/2 w-10 h-10 rounded-full bg-teal-400 hover:bg-teal-300 text-black flex items-center justify-center shadow-lg transition-all z-20 cursor-pointer border-none"
+              >
+                <ChevronLeft size={20} />
+              </button>
+              <button
+                onClick={(e) => {
+                  e.stopPropagation();
+                  const nextIdx = (categoryIndex + 1) % CATEGORIES_LIST.length;
+                  setCategoryIndex(nextIdx);
+                  setSelectedCategory(CATEGORIES_LIST[nextIdx].id);
+                }}
+                className="absolute right-0 top-[40%] -translate-y-1/2 w-10 h-10 rounded-full bg-teal-400 hover:bg-teal-300 text-black flex items-center justify-center shadow-lg transition-all z-20 cursor-pointer border-none"
+              >
+                <ChevronRight size={20} />
+              </button>
+
+              {/* Learn More Button */}
+              <button
+                onClick={() => setSelectedCategory(CATEGORIES_LIST[categoryIndex].id)}
+                className="mt-6 px-6 py-2.5 rounded-full text-xs font-syne font-bold tracking-widest text-[#050505] bg-teal-400 hover:bg-teal-300 hover:shadow-[0_0_20px_rgba(45,212,191,0.5)] transition-all flex items-center justify-center space-x-2 cursor-pointer border-none"
+              >
+                <span>Learn More</span>
+                <ChevronDown size={12} />
+              </button>
             </div>
+
+            {/* Filtered Events Section in Requested Format */}
+            {selectedCategory && (
+              <div className="w-full max-w-5xl space-y-6 pt-6 text-center items-center flex flex-col">
+                <div className="w-full flex justify-between items-center border-b border-white/10 pb-3">
+                  <h3 className="font-serif italic text-lg md:text-xl text-teal-300 font-bold">
+                    {CATEGORIES_LIST.find((c) => c.id === selectedCategory)?.title} Events
+                  </h3>
+                  <button
+                    onClick={() => setSelectedCategory(null)}
+                    className="text-xs font-mono text-neutral-400 hover:text-white border border-neutral-800 hover:border-neutral-500 px-3 py-1 rounded-full cursor-pointer transition-all"
+                  >
+                    Close Events
+                  </button>
+                </div>
+
+                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 w-full">
+                  {getFilteredEvents(selectedCategory).map((ev, idx) => (
+                    <div
+                      key={ev.id}
+                      className="glass-panel p-5 rounded-2xl border border-sky-500/10 bg-slate-950/70 hover:border-teal-500/30 hover:shadow-[0_0_20px_rgba(45,212,191,0.1)] transition-all duration-300 flex flex-col justify-between text-left h-[260px] relative group"
+                    >
+                      <div className="space-y-2">
+                        <h4 className="font-serif italic font-bold text-sky-300 text-base leading-tight line-clamp-2">
+                          S{String(idx + 1).padStart(2, '0')}. {ev.name}
+                        </h4>
+                        <p className="text-[11px] font-sans text-neutral-400 leading-relaxed line-clamp-4">
+                          {ev.rules && ev.rules[0] ? ev.rules[0] : "No specific description available. Standard competition rules apply."}
+                        </p>
+                      </div>
+
+                      <div className="space-y-3 pt-3 border-t border-white/5">
+                        <div className="flex flex-wrap gap-2">
+                          <span className="text-sky-300 bg-sky-950/40 border border-sky-500/20 px-2 py-0.5 rounded-full text-[9px] font-mono">
+                            {ev.fee}
+                          </span>
+                          <span className="text-neutral-400 bg-neutral-900/50 border border-neutral-800 px-2 py-0.5 rounded-full text-[9px] font-mono">
+                            Offline
+                          </span>
+                        </div>
+
+                        <button
+                          onClick={() => {
+                            setSelectedEvent(ev);
+                            setShowRegForm(true);
+                          }}
+                          className="w-full py-2 rounded-xl text-[10px] font-syne font-bold tracking-wider text-[#050505] bg-teal-400 hover:bg-teal-300 transition-colors cursor-pointer border-none"
+                        >
+                          Register Now
+                        </button>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
           </div>
         </ScrollSection>
 
@@ -1867,11 +2039,13 @@ function ScrollSection({ scrollYProgress, start, end, children, keepVisible = fa
       : [40, 0, 0, -40]
   );
 
+  const pointerEvents = useTransform(opacity, (v) => (v > 0.1 ? "auto" : "none"));
+
   return (
     <div className="h-screen w-full flex items-center justify-center sticky top-0 px-6 md:px-24 pointer-events-none select-none">
       <motion.div
-        style={{ opacity, y }}
-        className="w-full max-w-6xl pointer-events-auto"
+        style={{ opacity, y, pointerEvents }}
+        className="w-full max-w-6xl"
       >
         {children}
       </motion.div>
