@@ -806,9 +806,10 @@ export default function Home() {
   const [showRegistration, setShowRegistration] = useState(false);
   const [regForm, setRegForm] = useState({ name: "", phone: "", college: "", age: "" });
   const [regSubmitted, setRegSubmitted] = useState(false);
-  const [sportsTab, setSportsTab] = useState<string>("outdoor");
-  const [showCategories, setShowCategories] = useState(false);
+  const [sportsTab, setSportsTab] = useState<string>("stage");
+  const [showCategories, setShowCategories] = useState(true);
   const [showRegForm, setShowRegForm] = useState(false);
+  const [afterMovieYear, setAfterMovieYear] = useState<"2025" | "2024" | "2023">("2025");
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
@@ -1199,19 +1200,19 @@ export default function Home() {
         {/* Center Links (Minimalist & Glassmorphic hover) */}
         <div className="hidden md:flex items-center space-x-1.5 glass-panel px-4 py-1.5 rounded-full text-xs font-mono tracking-widest text-neutral-400">
           <button onClick={() => scrollToStage(0)} className="hover:text-teal-400 px-3 py-1 rounded-full transition-colors cursor-pointer">
-            OVERVIEW
+            HOME
           </button>
           <span className="text-white/10 select-none">•</span>
           <button onClick={() => scrollToStage(1)} className="hover:text-teal-400 px-3 py-1 rounded-full transition-colors cursor-pointer">
-            STAGE EVENTS
+            SPONSORS
           </button>
           <span className="text-white/10 select-none">•</span>
           <button onClick={() => scrollToStage(2)} className="hover:text-teal-400 px-3 py-1 rounded-full transition-colors cursor-pointer">
-            SPORTS & ARTS
+            EVENTS
           </button>
           <span className="text-white/10 select-none">•</span>
           <button onClick={() => scrollToStage(3)} className="hover:text-teal-400 px-3 py-1 rounded-full transition-colors cursor-pointer">
-            REGISTRATION
+            AFTER MOVIE
           </button>
         </div>
 
@@ -1236,7 +1237,7 @@ export default function Home() {
           </button>
 
           <button
-            onClick={() => scrollToStage(3)}
+            onClick={() => scrollToStage(2)}
             className="relative px-5 py-2 rounded-full text-xs font-mono tracking-widest text-white border border-teal-500/30 overflow-hidden bg-teal-500/5 hover:bg-teal-500/10 transition-all hover:border-teal-400 hover:shadow-[0_0_20px_rgba(45,212,191,0.25)] cursor-pointer"
           >
             REGISTER NOW
@@ -1263,10 +1264,10 @@ export default function Home() {
               className="group flex items-center justify-end relative py-1 cursor-pointer focus:outline-none"
             >
               <span className="absolute right-8 text-[9px] font-mono tracking-widest text-teal-400 opacity-0 group-hover:opacity-100 transition-all duration-300 translate-x-2 group-hover:translate-x-0 pointer-events-none select-none uppercase">
-                {idx === 0 && "01 // OVERVIEW"}
-                {idx === 1 && "02 // STAGE EVENTS"}
-                {idx === 2 && "03 // SPORTS & ARTS"}
-                {idx === 3 && "04 // REGISTRATION"}
+                {idx === 0 && "01 // HOME"}
+                {idx === 1 && "02 // SPONSORS"}
+                {idx === 2 && "03 // EVENTS"}
+                {idx === 3 && "04 // AFTER MOVIE"}
               </span>
               <div
                 className={`w-2.5 h-2.5 rounded-full border transition-all duration-300 ${
@@ -1298,7 +1299,7 @@ export default function Home() {
           <div className="max-w-3xl flex flex-col space-y-4">
             <div className="flex items-center space-x-3 text-teal-400 font-mono text-xs tracking-[0.3em]">
               <Compass size={14} className="animate-pulse" />
-              <span>01 // THE LEGACY</span>
+              <span>01 // HOME</span>
             </div>
             
             <h1 className="text-4xl md:text-6xl font-syne font-extrabold tracking-tight text-white leading-[1.1]">
@@ -1344,195 +1345,209 @@ export default function Home() {
           </div>
         </ScrollSection>
 
-        {/* SECTION 2: Exploding structure / Anomaly (scroll progress ~25% to ~55%) */}
+        {/* SECTION 2: Sponsors (scroll progress ~25% to ~55%) */}
         <ScrollSection scrollYProgress={scrollYProgress} start={0.28} end={0.48}>
           <div className="w-full flex flex-col space-y-6">
-            <div className="max-w-xl flex flex-col space-y-2">
+            <div className="max-w-xl flex flex-col space-y-2 text-left self-start">
               <div className="flex items-center space-x-3 text-teal-400 font-mono text-xs tracking-[0.3em]">
                 <Layers size={14} />
-                <span>02 // THE MAIN STAGE</span>
+                <span>02 // SPONSORS</span>
               </div>
               
               <h2 className="text-3xl md:text-5xl font-syne font-bold tracking-tight text-white leading-tight">
-                Stage <br />
+                Our Premium <br />
                 <span className="text-transparent bg-clip-text bg-gradient-to-r from-teal-400 to-teal-200">
-                  Performances
+                  Partners
                 </span>
               </h2>
               
               <p className="text-xs md:text-sm font-sans text-neutral-400 leading-relaxed">
-                Witness spectacular talent on January 22nd and 23rd. Click any card below to view detailed guidelines, registration fees, prize structures, and coordinators.
+                Pillai Euforia 2026 is brought to life by the generous support of our industry-leading partners and sponsors.
               </p>
             </div>
-            
-            {/* Stage Events Grid */}
-            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3 max-h-[48vh] overflow-y-auto pr-2 custom-scrollbar">
-              {EVENTS_DATA.filter(ev => ev.category === "Stage Event").map((ev) => (
-                <div
-                  key={ev.id}
-                  onClick={() => setSelectedEvent(ev)}
-                  className="glass-panel p-4 rounded-2xl border border-white/[0.04] bg-white/[0.01] hover:bg-white/[0.04] hover:border-teal-500/30 hover:-translate-y-1 transition-all duration-300 cursor-pointer flex flex-col justify-between text-left group"
-                >
-                  <div>
-                    <div className="flex justify-between items-start mb-2">
-                      <Music size={14} className="text-teal-400/70 group-hover:text-teal-400 transition-colors" />
-                      <span className="text-[9px] font-mono text-neutral-500 uppercase tracking-widest">Stage</span>
-                    </div>
-                    <h3 className="font-syne font-bold text-white text-xs md:text-sm line-clamp-1 group-hover:text-teal-300 transition-colors">
-                      {ev.name}
-                    </h3>
-                  </div>
-                  <div className="mt-4 pt-2 border-t border-white/5 flex justify-between items-center text-[10px] font-mono">
-                    <span className="text-neutral-500">FEE:</span>
-                    <span className="text-teal-400 font-bold">{ev.fee}</span>
-                  </div>
-                </div>
-              ))}
-            </div>
 
-            {/* General Guidelines Banner */}
-            <div className="glass-panel p-3 rounded-xl border border-white/[0.03] text-left max-w-3xl flex items-center space-x-3 text-[10px] text-neutral-500 font-mono">
-              <Info size={14} className="text-teal-400 shrink-0" />
-              <span>Reporting: All stage entries must report 1 hour prior. Obscenity/vulgarity in costumes or music is strictly banned.</span>
+            {/* Sponsors Grid */}
+            <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 max-w-4xl w-full text-left">
+              {[
+                { 
+                  name: "Red Bull", 
+                  type: "Energy Partner", 
+                  logo: "https://www.hatchwise.com/wp-content/uploads/2021/12/Screen-Shot-2021-12-22-at-7.31.49-AM-1024x703.png" 
+                },
+                { 
+                  name: "Sakal", 
+                  type: "Print Media Partner", 
+                  logo: "https://epaper.esakal.com/images/SakalLogo.png" 
+                },
+                { 
+                  name: "Imagica", 
+                  type: "Entertainment Partner", 
+                  logo: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ919u79RB72KMyLwHqx1_pnweRiXq4b7KB9fPYilyPo7MiA6Ep5N9TU_NI&s=10" 
+                },
+                { 
+                  name: "Canara Bank", 
+                  type: "Banking Partner", 
+                  logo: "https://mayastickers.com/image/cache/catalog/mainimage/ccc/canara_bank_logo_stickers-550x550w.jpg" 
+                },
+              ].map((sponsor, idx) => (
+                <motion.div
+                  key={idx}
+                  whileHover={{ y: -5, scale: 1.02 }}
+                  className="glass-panel p-5 rounded-2xl border border-white/[0.04] bg-white/[0.01] hover:bg-white/[0.04] hover:border-teal-500/20 transition-all duration-300 flex flex-col items-center justify-center text-center space-y-3"
+                >
+                  <div className="w-full h-20 bg-white/95 rounded-xl p-2 flex items-center justify-center overflow-hidden">
+                    <img 
+                      src={sponsor.logo} 
+                      alt={sponsor.name} 
+                      className="max-w-full max-h-full object-contain"
+                    />
+                  </div>
+                  <div>
+                    <h3 className="font-syne font-bold text-white text-sm tracking-wide">{sponsor.name}</h3>
+                    <span className="text-[9px] font-mono text-neutral-500 uppercase tracking-widest block mt-1">{sponsor.type}</span>
+                  </div>
+                </motion.div>
+              ))}
             </div>
           </div>
         </ScrollSection>
 
-        {/* SECTION 3: The Glowing core / Activation (scroll progress ~55% to ~80%) */}
+        {/* SECTION 3: Unified Events Category Explorer (scroll progress ~55% to ~80%) */}
         <ScrollSection scrollYProgress={scrollYProgress} start={0.58} end={0.78}>
-          <div className="w-full flex flex-col space-y-6">
-            <div className="max-w-xl flex flex-col space-y-2 text-left self-start">
+          <div className="w-full flex flex-col space-y-6 items-center text-center">
+            <div className="max-w-xl flex flex-col space-y-2 text-center items-center">
               <div className="flex items-center space-x-3 text-teal-400 font-mono text-xs tracking-[0.3em]">
                 <Activity size={14} className="animate-[pulse_1.5s_infinite]" />
-                <span>03 // THE ARENA</span>
+                <span>03 // REGISTER EVENT</span>
               </div>
               
-              <h2 className="text-3xl md:text-5xl font-syne font-bold tracking-tight text-white leading-tight">
-                Sports, Esports <br />
+              <h2 className="text-3xl md:text-5xl font-syne font-bold tracking-tight text-white leading-tight animate-[pulse_3s_infinite]">
+                Register <br />
                 <span className="text-transparent bg-clip-text bg-gradient-to-r from-teal-400 to-cyan-300 glow-teal">
-                  & Creative Arts
+                  Event
                 </span>
               </h2>
+              
+              <p className="text-xs md:text-sm font-sans text-neutral-400 leading-relaxed">
+                Join the grandest battles of Pillai Euforia 2026. Showcase your talent, outwit your opponents, and claim your share of the prizes.
+              </p>
             </div>
 
-            {/* Tab Controls */}
-            <div className="flex flex-wrap gap-2 border-b border-white/5 pb-2 font-mono text-[10px] md:text-xs">
-              {(["outdoor", "indoor", "esports", "arts"] as const).map((tab) => (
-                <button
-                  key={tab}
-                  onClick={() => setSportsTab(tab)}
-                  className={`px-4 py-1.5 rounded-full border transition-all cursor-pointer uppercase tracking-widest ${
-                    sportsTab === tab
-                      ? "bg-teal-500/10 border-teal-400 text-teal-400 shadow-[0_0_15px_rgba(45,212,191,0.2)]"
-                      : "border-neutral-800 text-neutral-400 hover:border-neutral-600 hover:text-white"
-                  }`}
-                >
-                  {tab === "outdoor" && "Outdoor Sports"}
-                  {tab === "indoor" && "Indoor Sports"}
-                  {tab === "esports" && "E-Sports Arena"}
-                  {tab === "arts" && "Creative Arts"}
-                </button>
-              ))}
-            </div>
+            <div className="space-y-4 w-full flex flex-col items-center">
+              {/* Category selectors */}
+              <div className="flex flex-wrap gap-2 justify-center border-b border-white/5 pb-4 font-mono text-[9px] md:text-xs w-full max-w-2xl">
+                {([
+                  { key: "stage", label: "Stage event" },
+                  { key: "indoor", label: "indoor Event" },
+                  { key: "outdoor", label: "outdoor Event" },
+                  { key: "esports", label: "Esports" }
+                ] as const).map((cat) => (
+                  <button
+                    key={cat.key}
+                    onClick={() => setSportsTab(cat.key)}
+                    className={`px-3 py-1.5 rounded-full border transition-all cursor-pointer uppercase tracking-wider ${
+                      sportsTab === cat.key
+                        ? "bg-teal-500/10 border-teal-400 text-teal-400 shadow-[0_0_15px_rgba(45,212,191,0.2)]"
+                        : "border-neutral-800 text-neutral-400 hover:border-neutral-600 hover:text-white"
+                    }`}
+                  >
+                    {cat.label}
+                  </button>
+                ))}
+              </div>
 
-            {/* Tab Content Grid */}
-            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3 max-h-[44vh] overflow-y-auto pr-2 custom-scrollbar">
-              {EVENTS_DATA.filter((ev) => {
-                if (sportsTab === "outdoor") return ev.category === "Outdoor Sport";
-                if (sportsTab === "indoor") return ev.category === "Indoor Sport";
-                if (sportsTab === "esports") return ev.category === "E-Sports";
-                return ev.category === "Creative Arts";
-              }).map((ev) => (
-                <div
-                  key={ev.id}
-                  onClick={() => setSelectedEvent(ev)}
-                  className="glass-panel p-4 rounded-2xl border border-white/[0.04] bg-white/[0.01] hover:bg-white/[0.04] hover:border-teal-500/30 hover:-translate-y-1 transition-all duration-300 cursor-pointer flex flex-col justify-between text-left group"
-                >
-                  <div>
-                    <div className="flex justify-between items-start mb-2">
-                      {sportsTab === "outdoor" && <CircleDot size={14} className="text-teal-400/70 group-hover:text-teal-400 transition-colors" />}
-                      {sportsTab === "indoor" && <Award size={14} className="text-teal-400/70 group-hover:text-teal-400 transition-colors" />}
-                      {sportsTab === "esports" && <Gamepad2 size={14} className="text-teal-400/70 group-hover:text-teal-400 transition-colors" />}
-                      {sportsTab === "arts" && <Palette size={14} className="text-teal-400/70 group-hover:text-teal-400 transition-colors" />}
-                      <span className="text-[9px] font-mono text-neutral-500 uppercase tracking-widest">{sportsTab}</span>
+              {/* Filtered Grid */}
+              <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3 max-h-[36vh] overflow-y-auto pr-2 custom-scrollbar w-full max-w-5xl">
+                {EVENTS_DATA.filter((ev) => {
+                  if (sportsTab === "stage") return ev.category === "Stage Event";
+                  if (sportsTab === "indoor") return ev.category === "Indoor Sport" || ev.category === "Creative Arts";
+                  if (sportsTab === "outdoor") return ev.category === "Outdoor Sport";
+                  if (sportsTab === "esports") return ev.category === "E-Sports";
+                  return false;
+                }).map((ev) => (
+                  <div
+                    key={ev.id}
+                    onClick={() => setSelectedEvent(ev)}
+                    className="glass-panel p-4 rounded-2xl border border-white/[0.04] bg-white/[0.01] hover:bg-white/[0.04] hover:border-teal-500/30 hover:-translate-y-1 transition-all duration-300 cursor-pointer flex flex-col justify-between text-left group"
+                  >
+                    <div>
+                      <div className="flex justify-between items-start mb-2">
+                        {sportsTab === "stage" && <Music size={14} className="text-teal-400/70 group-hover:text-teal-400 transition-colors" />}
+                        {sportsTab === "indoor" && <Award size={14} className="text-teal-400/70 group-hover:text-teal-400 transition-colors" />}
+                        {sportsTab === "outdoor" && <CircleDot size={14} className="text-teal-400/70 group-hover:text-teal-400 transition-colors" />}
+                        {sportsTab === "esports" && <Gamepad2 size={14} className="text-teal-400/70 group-hover:text-teal-400 transition-colors" />}
+                        <span className="text-[9px] font-mono text-neutral-500 uppercase tracking-widest">{sportsTab}</span>
+                      </div>
+                      <h3 className="font-syne font-bold text-white text-xs md:text-sm line-clamp-1 group-hover:text-teal-300 transition-colors">
+                        {ev.name}
+                      </h3>
                     </div>
-                    <h3 className="font-syne font-bold text-white text-xs md:text-sm line-clamp-1 group-hover:text-teal-300 transition-colors">
-                      {ev.name}
-                    </h3>
+                    <div className="mt-4 pt-2 border-t border-white/5 flex justify-between items-center text-[10px] font-mono">
+                      <span className="text-neutral-500">FEE:</span>
+                      <span className="text-teal-400 font-bold">{ev.fee}</span>
+                    </div>
                   </div>
-                  <div className="mt-4 pt-2 border-t border-white/5 flex justify-between items-center text-[10px] font-mono">
-                    <span className="text-neutral-500">FEE:</span>
-                    <span className="text-teal-400 font-bold">{ev.fee}</span>
-                  </div>
-                </div>
-              ))}
+                ))}
+              </div>
             </div>
           </div>
         </ScrollSection>
 
-        {/* SECTION 4: Reassembly & Synthesis (scroll progress ~80% to ~100%) */}
+        {/* SECTION 4: After Movie (scroll progress ~80% to ~100%) */}
         <ScrollSection scrollYProgress={scrollYProgress} start={0.84} end={1.0} keepVisible>
           <div className="w-full flex flex-col space-y-6 text-center items-center">
             <div className="flex items-center space-x-3 text-teal-400 font-mono text-xs tracking-[0.3em]">
               <HelpCircle size={14} />
-              <span>04 // REGISTRATION & SYSTEM</span>
+              <span>04 // AFTER MOVIE</span>
             </div>
             
             <h2 className="text-4xl md:text-6xl font-syne font-extrabold tracking-tight text-white leading-none">
-              Register <br />
+              The Celebration <br />
               <span className="text-transparent bg-clip-text bg-gradient-to-r from-teal-400 to-emerald-400 glow-teal">
-                Your Entry
+                After Movie
               </span>
             </h2>
             
             <p className="text-xs md:text-sm font-sans text-neutral-400 leading-relaxed max-w-lg">
-              Registration requires entry receipts. Complete registration by coordinating with our registration committee heads or event leads on WhatsApp.
+              Relive the magical highlights, heavy drops, and vibrant crowds of our previous edition. Witness the energy of Pillai Euforia!
             </p>
 
-            {/* Core Contacts Grid */}
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-3 max-w-4xl w-full text-left">
-              <div className="glass-panel p-3 rounded-xl border border-white/[0.03] bg-white/[0.01]">
-                <span className="text-[9px] font-mono text-teal-400 block tracking-widest uppercase">General Registration</span>
-                <span className="font-syne font-bold text-xs text-white block mt-1">Shravani (Head)</span>
-                <span className="text-[9px] font-mono text-neutral-500">+91 8390575631</span>
-              </div>
-              <div className="glass-panel p-3 rounded-xl border border-white/[0.03] bg-white/[0.01]">
-                <span className="text-[9px] font-mono text-teal-400 block tracking-widest uppercase">General Registration</span>
-                <span className="font-syne font-bold text-xs text-white block mt-1">Sujal (Head)</span>
-                <span className="text-[9px] font-mono text-neutral-500">+91 9594518516</span>
-              </div>
-              <div className="glass-panel p-3 rounded-xl border border-white/[0.03] bg-white/[0.01]">
-                <span className="text-[9px] font-mono text-teal-400 block tracking-widest uppercase">Registration Joint</span>
-                <span className="font-syne font-bold text-xs text-white block mt-1">Sarah (Joint)</span>
-                <span className="text-[9px] font-mono text-neutral-500">+91 8087493835</span>
-              </div>
-              <div className="glass-panel p-3 rounded-xl border border-white/[0.03] bg-white/[0.01]">
-                <span className="text-[9px] font-mono text-teal-400 block tracking-widest uppercase">Registration Joint</span>
-                <span className="font-syne font-bold text-xs text-white block mt-1">Harsh (Joint)</span>
-                <span className="text-[9px] font-mono text-neutral-500">+91 7738668433</span>
-              </div>
+            {/* Year Selector Tabs */}
+            <div className="flex space-x-3 font-mono text-xs mb-2">
+              {([
+                { year: "2025", title: "Euforia 2025" },
+                { year: "2024", title: "Euforia 2024" },
+                { year: "2023", title: "Euforia 2023" }
+              ] as const).map((item) => (
+                <button
+                  key={item.year}
+                  onClick={() => setAfterMovieYear(item.year)}
+                  className={`px-4 py-2 rounded-full border transition-all cursor-pointer ${
+                    afterMovieYear === item.year
+                      ? "bg-teal-500/10 border-teal-400 text-teal-400 shadow-[0_0_15px_rgba(45,212,191,0.2)]"
+                      : "border-neutral-800 text-neutral-400 hover:border-neutral-600 hover:text-white"
+                  }`}
+                >
+                  {item.title}
+                </button>
+              ))}
             </div>
-            
-            <div className="pt-2 flex flex-col sm:flex-row items-center gap-4">
-              <a
-                href="https://wa.me/918390575631?text=Hi%20Shravani,%20I%20want%20to%20register%20for%20Pillai%20Euforia%202026.%20Please%20send%20details."
-                target="_blank"
-                rel="noopener noreferrer"
-                className="px-8 py-3.5 rounded-full text-xs font-syne font-bold tracking-widest text-[#050505] bg-teal-400 hover:bg-teal-300 hover:shadow-[0_0_30px_rgba(45,212,191,0.6)] transition-all cursor-pointer flex items-center space-x-2"
-              >
-                <MessageSquare size={14} />
-                <span>CONNECT WITH REGISTRATION HEAD</span>
-              </a>
-              
-              <a
-                href="https://instagram.com/pillaieuforia"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="px-6 py-3 rounded-full text-xs font-mono tracking-wider text-white border border-white/10 hover:border-teal-500/30 hover:bg-white/5 transition-all cursor-pointer flex items-center space-x-2"
-              >
-                <span>FOLLOW @PILLAIEUFORIA</span>
-                <ExternalLink size={12} className="text-teal-400" />
-              </a>
+
+            {/* Video Player Box */}
+            <div className="w-full max-w-3xl aspect-video rounded-3xl border border-white/10 overflow-hidden glass-panel bg-black/50 shadow-[0_0_50px_rgba(20,184,166,0.1)] relative group">
+              <iframe
+                key={afterMovieYear}
+                className="w-full h-full"
+                src={`https://www.youtube.com/embed/${
+                  afterMovieYear === "2025" ? "19m3qR0u5xU" :
+                  afterMovieYear === "2024" ? "uI9fnC3CfRM" :
+                  "spBFzkhJ28I"
+                }?autoplay=0&mute=1`}
+                title={`Pillai Euforia ${afterMovieYear} After Movie`}
+                frameBorder="0"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                allowFullScreen
+              />
             </div>
           </div>
         </ScrollSection>
