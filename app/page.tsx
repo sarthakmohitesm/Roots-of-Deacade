@@ -1248,6 +1248,9 @@ export default function Home() {
       {/* 3. Sticky Background Canvas Container */}
       <div className="fixed inset-0 w-full h-screen -z-20 bg-[#050505]">
         <canvas ref={canvasRef} className="w-full h-full block" />
+        {/* Cinematic Vignette Overlay to hide watermark and enhance depth */}
+        <div className="absolute inset-0 bg-gradient-to-t from-[#050505] via-[#050505]/10 to-[#050505]/40 pointer-events-none" />
+        <div className="absolute inset-0 bg-gradient-to-r from-[#050505]/70 via-transparent to-[#050505]/70 pointer-events-none" />
       </div>
 
       {/* 4. Awwwards Side Stage Navigator */}
