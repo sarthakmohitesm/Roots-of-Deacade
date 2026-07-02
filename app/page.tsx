@@ -1251,11 +1251,11 @@ export default function Home() {
               onClick={() => scrollToStage(idx)}
               className="group flex items-center justify-end relative py-1 cursor-pointer focus:outline-none"
             >
-              <span className="absolute right-8 text-[9px] font-mono tracking-widest text-teal-400 opacity-0 group-hover:opacity-100 transition-all duration-300 translate-x-2 group-hover:translate-x-0 pointer-events-none select-none uppercase">
-                {idx === 0 && "01 // HOME"}
-                {idx === 1 && "02 // SPONSORS"}
-                {idx === 2 && "03 // EVENTS"}
-                {idx === 3 && "04 // AFTER MOVIE"}
+              <span className="absolute right-8 text-[11px] font-syne font-bold tracking-widest text-teal-300 opacity-0 group-hover:opacity-100 transition-all duration-300 translate-x-2 group-hover:translate-x-0 pointer-events-none select-none uppercase">
+                {idx === 0 && "HOME"}
+                {idx === 1 && "SPONSORS"}
+                {idx === 2 && "EVENTS"}
+                {idx === 3 && "AFTER MOVIE"}
               </span>
               <div
                 className={`w-2.5 h-2.5 rounded-full border transition-all duration-300 ${
@@ -1267,10 +1267,6 @@ export default function Home() {
             </button>
           ))}
         </div>
-        <div className="w-[1px] h-12 bg-neutral-800" />
-        <span className="text-[10px] font-mono text-neutral-600 select-none">
-          {String(currentStage + 1).padStart(2, "0")}
-        </span>
       </div>
 
       {/* 5. Audio status tip at the bottom left */}
@@ -1285,9 +1281,9 @@ export default function Home() {
         {/* SECTION 1: Intro / Ascent (scroll progress ~0% to ~25%) */}
         <ScrollSection scrollYProgress={scrollYProgress} start={0.02} end={0.20}>
           <div className="max-w-3xl flex flex-col space-y-4">
-            <div className="flex items-center space-x-3 text-teal-400 font-mono text-xs tracking-[0.3em]">
-              <Compass size={14} className="animate-pulse" />
-              <span>01 // HOME</span>
+            <div className="flex items-center space-x-3 text-teal-300 font-syne font-bold text-xs md:text-sm tracking-[0.25em]">
+              <Compass size={14} className="animate-pulse text-teal-400" />
+              <span>HOME</span>
             </div>
             
             <h1 className="text-4xl md:text-6xl font-syne font-extrabold tracking-tight text-white leading-[1.1]">
@@ -1300,7 +1296,7 @@ export default function Home() {
               A Decade of Celebration Redefined
             </p>
             
-            <p className="text-xs md:text-sm font-sans text-neutral-400 leading-relaxed max-w-xl">
+            <p className="text-xs md:text-sm font-sans text-neutral-300 leading-relaxed max-w-xl">
               Marking its 10th anniversary, Pillai Euforia stands as Maharashtra's most anticipated college festival. Under the vision of Mahatma Education Society's Pillai Group of Institutions, we bring together over 60+ competitive events across music, sports, technology, and art.
             </p>
             
@@ -1337,9 +1333,9 @@ export default function Home() {
         <ScrollSection scrollYProgress={scrollYProgress} start={0.28} end={0.48}>
           <div className="w-full flex flex-col space-y-6">
             <div className="max-w-xl flex flex-col space-y-2 text-left self-start">
-              <div className="flex items-center space-x-3 text-teal-400 font-mono text-xs tracking-[0.3em]">
-                <Layers size={14} />
-                <span>02 // SPONSORS</span>
+              <div className="flex items-center space-x-3 text-teal-300 font-syne font-bold text-xs md:text-sm tracking-[0.25em]">
+                <Layers size={14} className="text-teal-400" />
+                <span>SPONSORS</span>
               </div>
               
               <h2 className="text-3xl md:text-5xl font-syne font-bold tracking-tight text-white leading-tight">
@@ -1349,7 +1345,7 @@ export default function Home() {
                 </span>
               </h2>
               
-              <p className="text-xs md:text-sm font-sans text-neutral-400 leading-relaxed">
+              <p className="text-xs md:text-sm font-sans text-neutral-300 leading-relaxed">
                 Pillai Euforia 2026 is brought to life by the generous support of our industry-leading partners and sponsors.
               </p>
             </div>
@@ -1404,9 +1400,9 @@ export default function Home() {
         <ScrollSection scrollYProgress={scrollYProgress} start={0.58} end={0.78}>
           <div className="w-full flex flex-col space-y-6 items-center text-center">
             <div className="max-w-xl flex flex-col space-y-2 text-center items-center">
-              <div className="flex items-center space-x-3 text-teal-400 font-mono text-xs tracking-[0.3em]">
-                <Activity size={14} className="animate-[pulse_1.5s_infinite]" />
-                <span>03 // REGISTER EVENT</span>
+              <div className="flex items-center space-x-3 text-teal-300 font-syne font-bold text-xs md:text-sm tracking-[0.25em]">
+                <Activity size={14} className="animate-[pulse_1.5s_infinite] text-teal-400" />
+                <span>REGISTER EVENT</span>
               </div>
               
               <h2 className="text-3xl md:text-5xl font-syne font-bold tracking-tight text-white leading-tight animate-[pulse_3s_infinite]">
@@ -1416,7 +1412,7 @@ export default function Home() {
                 </span>
               </h2>
               
-              <p className="text-xs md:text-sm font-sans text-neutral-400 leading-relaxed">
+              <p className="text-xs md:text-sm font-sans text-neutral-300 leading-relaxed">
                 Join the grandest battles of Pillai Euforia 2026. Showcase your talent, outwit your opponents, and claim your share of the prizes.
               </p>
             </div>
@@ -1484,9 +1480,9 @@ export default function Home() {
         {/* SECTION 4: After Movie (scroll progress ~80% to ~100%) */}
         <ScrollSection scrollYProgress={scrollYProgress} start={0.84} end={1.0} keepVisible>
           <div className="w-full flex flex-col space-y-6 text-center items-center">
-            <div className="flex items-center space-x-3 text-teal-400 font-mono text-xs tracking-[0.3em]">
-              <HelpCircle size={14} />
-              <span>04 // AFTER MOVIE</span>
+            <div className="flex items-center space-x-3 text-teal-300 font-syne font-bold text-xs md:text-sm tracking-[0.25em]">
+              <HelpCircle size={14} className="text-teal-400" />
+              <span>AFTER MOVIE</span>
             </div>
             
             <h2 className="text-4xl md:text-6xl font-syne font-extrabold tracking-tight text-white leading-none">
@@ -1496,7 +1492,7 @@ export default function Home() {
               </span>
             </h2>
             
-            <p className="text-xs md:text-sm font-sans text-neutral-400 leading-relaxed max-w-lg">
+            <p className="text-xs md:text-sm font-sans text-neutral-300 leading-relaxed max-w-lg">
               Relive the magical highlights, heavy drops, and vibrant crowds of our previous edition. Witness the energy of Pillai Euforia!
             </p>
 
