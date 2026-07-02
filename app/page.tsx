@@ -2015,9 +2015,10 @@ interface ScrollSectionProps {
   end: number;
   children: React.ReactNode;
   keepVisible?: boolean;
+  active?: boolean;
 }
 
-function ScrollSection({ scrollYProgress, start, end, children, keepVisible = false }: ScrollSectionProps) {
+function ScrollSection({ scrollYProgress, start, end, children, keepVisible = false, active }: ScrollSectionProps) {
   // Drive transitions on GPU utilizing Framer Motion values
   const opacity = useTransform(
     scrollYProgress,
@@ -2044,7 +2045,11 @@ function ScrollSection({ scrollYProgress, start, end, children, keepVisible = fa
   return (
     <div className="h-screen w-full flex items-center justify-center sticky top-0 px-6 md:px-24 pointer-events-none select-none">
       <motion.div
-        style={{ opacity, y, pointerEvents }}
+        style={{ 
+          opacity: active === false ? 0 : opacity, 
+          y, 
+          pointerEvents: active === false ? "none" : pointerEvents 
+        }}
         className="w-full max-w-6xl"
       >
         {children}
