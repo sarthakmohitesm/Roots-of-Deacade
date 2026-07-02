@@ -2,7 +2,11 @@
 
 import React, { useState, useEffect, useRef } from "react";
 import { motion, AnimatePresence, useScroll, useTransform, useMotionValueEvent } from "framer-motion";
-import { Volume2, VolumeX, Compass, ChevronDown, Activity, Layers, Disc, HelpCircle } from "lucide-react";
+import { 
+  Volume2, VolumeX, Compass, ChevronDown, Activity, Layers, Disc, HelpCircle,
+  Calendar, Clock, Trophy, Phone, Shield, ExternalLink, Zap, Users, Info, X, 
+  MapPin, Gamepad2, Award, Palette, Music, CircleDot, MessageSquare
+} from "lucide-react";
 
 // Web Audio API Synthesizer controller for immersive cinematic drone
 class SynthController {
@@ -128,6 +132,660 @@ interface Particle {
   depth: number;
 }
 
+// Complete database of events from the Pillai Euforia 2026 Brochure
+const EVENTS_DATA = [
+  // STAGE EVENTS
+  {
+    id: "solo-dance",
+    name: "Solo Dance",
+    category: "Stage Event",
+    fee: "₹200",
+    prize1: "₹3000",
+    prize2: "₹1000",
+    timeLimit: "3 minutes",
+    rules: [
+      "Time Limit: 3 minutes.",
+      "Music/Language: No restriction.",
+      "Vulgar or obscene costumes are strictly prohibited.",
+      "Music tracks must be submitted 2 days before the event."
+    ],
+    schedule: "January 22, 11:30 AM - 1:30 PM",
+    coordinators: "Prathamesh (+91 9967294237)"
+  },
+  {
+    id: "duet-dance",
+    name: "Duet Dance",
+    category: "Stage Event",
+    fee: "₹300",
+    prize1: "₹3000",
+    prize2: "₹1000",
+    timeLimit: "3 minutes",
+    rules: [
+      "Time Limit: 3 minutes.",
+      "Music/Language: No restriction.",
+      "Vulgar or obscene costumes are strictly prohibited.",
+      "Both partners must perform. Track must be submitted in advance."
+    ],
+    schedule: "January 22, 11:30 AM - 1:30 PM",
+    coordinators: "Prathamesh (+91 9967294237)"
+  },
+  {
+    id: "group-dance",
+    name: "Group Dance",
+    category: "Stage Event",
+    fee: "₹1000",
+    prize1: "₹6000",
+    prize2: "₹3000",
+    timeLimit: "5 minutes",
+    teamSize: "8 to 15 members",
+    rules: [
+      "Time Limit: 5 minutes.",
+      "Team Size: 8 to 15 members.",
+      "Music/Language: No restriction.",
+      "Vulgar or obscene costumes are strictly prohibited."
+    ],
+    schedule: "January 23, 2:00 PM - 3:30 PM",
+    coordinators: "Sarthak (+91 9209498788)"
+  },
+  {
+    id: "rapping",
+    name: "Rapping Battle",
+    category: "Stage Event",
+    fee: "₹150",
+    prize1: "₹2000",
+    prize2: "₹1000",
+    timeLimit: "2 minutes",
+    rules: [
+      "Time Limit: 2 minutes.",
+      "Languages Allowed: Hindi, English, Marathi.",
+      "Sledging or abusive language is strictly prohibited.",
+      "Participants must submit a copy of their lyrics before the performance."
+    ],
+    schedule: "January 22, 1:30 PM - 3:00 PM",
+    coordinators: "Fatema (+91 7028686952)"
+  },
+  {
+    id: "singing",
+    name: "Solo & Duet Singing",
+    category: "Stage Event",
+    fee: "₹200 (Solo) / ₹300 (Duet)",
+    prize1: "₹2500",
+    prize2: "₹1000",
+    timeLimit: "2 minutes",
+    rules: [
+      "Time Limit: 2 minutes.",
+      "Language: No restriction.",
+      "Sledging or abusive language is strictly prohibited.",
+      "Both participants must sing during Duet performance.",
+      "Participants must arrange their own guitar or keyboard, if required."
+    ],
+    schedule: "January 23, 10:30 AM - 12:00 PM",
+    coordinators: "Hardik (+91 9321676993)"
+  },
+  {
+    id: "mr-ms-euforia",
+    name: "Mr. & Ms. Euforia",
+    category: "Stage Event",
+    fee: "₹300",
+    prize1: "₹2000 (Each)",
+    rules: [
+      "Languages Allowed: Hindi, English, Marathi.",
+      "Round 1: Introduction and Walk.",
+      "Round 2: Talent Round (Time Limit: 1 minute).",
+      "Round 3: Question and Answer.",
+      "Vulgar or obscene costumes are strictly prohibited."
+    ],
+    schedule: "January 22, 3:00 PM - 5:00 PM",
+    coordinators: "Fatema (+91 7028686952)"
+  },
+  {
+    id: "war-of-dj",
+    name: "War of DJs",
+    category: "Stage Event",
+    fee: "₹500",
+    prize1: "₹3000",
+    timeLimit: "7 minutes",
+    rules: [
+      "Time Limit: 7 minutes.",
+      "Previously mixed music is not allowed.",
+      "Pen drives and CDs are allowed.",
+      "The mixing console will be provided by the organizers."
+    ],
+    schedule: "January 22, 5:30 PM - 6:30 PM",
+    coordinators: "Hardik (+91 9321676993)"
+  },
+  {
+    id: "euforia-classic",
+    name: "Euforia Classic (Bodybuilding)",
+    category: "Stage Event",
+    fee: "₹200",
+    prize1: "₹3000",
+    prize2: "₹1500",
+    rules: [
+      "Categories: Below 65 kg & Above 65 kg.",
+      "Bodybuilding shorts are compulsory (Board shorts not allowed).",
+      "Mandatory bodybuilding poses will be part of the competition.",
+      "Participants must bring their own tanning cream and oil."
+    ],
+    schedule: "January 23, 12:00 PM - 1:30 PM",
+    coordinators: "Prathamesh (+91 9967294237)"
+  },
+  {
+    id: "fashion-show",
+    name: "Fashion Show",
+    category: "Stage Event",
+    fee: "₹1000",
+    prize1: "₹8000",
+    prize2: "₹4000",
+    timeLimit: "8 minutes",
+    teamSize: "8 to 10 members",
+    rules: [
+      "Time Limit: 8 minutes.",
+      "Team Size: 8 to 10 members.",
+      "Each team must have its own theme & ensure cohesive presentation.",
+      "Only 2 coordinators from each team allowed backstage for assistance.",
+      "Teams must clear the stage immediately after performance."
+    ],
+    schedule: "January 23, 4:00 PM - 5:00 PM",
+    coordinators: "Sarthak (+91 9209498788)"
+  },
+
+  // OUTDOOR SPORTS
+  {
+    id: "football",
+    name: "Football (Boys)",
+    category: "Outdoor Sport",
+    fee: "₹1000",
+    prize1: "₹8000",
+    prize2: "₹4000",
+    teamSize: "10 players (7 on-field + 3 substitutes)",
+    rules: [
+      "Match Format: 7 vs 7 on ground field.",
+      "Players must wear canvas or stud shoes.",
+      "Barefoot play is strictly prohibited.",
+      "Knockout format matches.",
+      "In case of a tie, the winner will be decided by 3 penalty shots."
+    ],
+    schedule: "January 22, 11:30 AM Onwards",
+    coordinators: "Sarthak (+91 9619267166)"
+  },
+  {
+    id: "badminton",
+    name: "Badminton (Solo)",
+    category: "Outdoor Sport",
+    fee: "₹200",
+    prize1: "₹2000",
+    prize2: "₹1000",
+    rules: [
+      "Category: Individual (Solo) Singles.",
+      "Matches conducted as per Standard Badminton Federation Rules.",
+      "The player who first reaches 11 points wins."
+    ],
+    schedule: "January 22, 11:30 AM Onwards",
+    coordinators: "Sunny (+91 7276622005)"
+  },
+  {
+    id: "sprint-100m",
+    name: "100m Sprint",
+    category: "Outdoor Sport",
+    fee: "₹100",
+    prize1: "₹1000",
+    prize2: "₹500",
+    rules: [
+      "Category: Individual (Solo).",
+      "No false starts; one false start leads to disqualification.",
+      "Runners must stay within their assigned lanes.",
+      "Running shoes or spikes allowed; barefoot running not permitted."
+    ],
+    schedule: "January 22, 11:30 AM - 12:30 PM",
+    coordinators: "Sarthak (+91 9619267166)"
+  },
+  {
+    id: "relay-4x100",
+    name: "4x100m Relay (Boys)",
+    category: "Outdoor Sport",
+    fee: "₹200",
+    prize1: "₹2000",
+    prize2: "₹1000",
+    teamSize: "4 runners",
+    rules: [
+      "Team Size: 4 runners per team.",
+      "No false starts; one false start leads to disqualification.",
+      "Baton exchange must be in the designated zone.",
+      "Teams must remain within their assigned lanes.",
+      "Running shoes or spikes allowed; barefoot running not permitted."
+    ],
+    schedule: "January 22, 1:00 PM - 2:00 PM",
+    coordinators: "Sarthak (+91 9619267166)"
+  },
+  {
+    id: "shotput",
+    name: "Shot Put (Boys)",
+    category: "Outdoor Sport",
+    fee: "₹100",
+    prize1: "₹1000",
+    prize2: "₹500",
+    rules: [
+      "Category: Individual (Solo). Weight: 7 kg.",
+      "Each participant gets three attempts; best throw considered.",
+      "Event follows Standard Shot Put Rules."
+    ],
+    schedule: "January 22, 11:30 AM - 1:00 PM",
+    coordinators: "Sunny (+91 7276622005)"
+  },
+  {
+    id: "kabaddi",
+    name: "Kabaddi (Boys)",
+    category: "Outdoor Sport",
+    fee: "₹700",
+    prize1: "₹5000",
+    prize2: "₹2500",
+    teamSize: "10 players (7 on-field + 3 substitutes)",
+    rules: [
+      "Match Time: 10 minutes per half.",
+      "Matches played on a soil ground.",
+      "Proper Kabaddi kit is mandatory.",
+      "Rules as per Standard Kabaddi Association."
+    ],
+    schedule: "January 22, 11:30 AM Onwards",
+    coordinators: "Sarthak (+91 9619267166)"
+  },
+  {
+    id: "volleyball",
+    name: "Volleyball (Boys)",
+    category: "Outdoor Sport",
+    fee: "₹700",
+    prize1: "₹4000",
+    prize2: "₹2000",
+    teamSize: "9 players (6 on-court + 3 substitutes)",
+    rules: [
+      "Format: Best of 3 sets (15 points per set).",
+      "Matches follow Standard Volleyball Federation Rules."
+    ],
+    schedule: "January 22, 11:30 AM Onwards",
+    coordinators: "Sunny (+91 7276622005)"
+  },
+  {
+    id: "box-cricket",
+    name: "Box Cricket (Boys)",
+    category: "Outdoor Sport",
+    fee: "₹700",
+    prize1: "₹6000",
+    prize2: "₹3000",
+    teamSize: "9 players (6 on-field + 3 substitutes)",
+    rules: [
+      "Format: 4 overs per inning.",
+      "One bowler can bowl a maximum of 2 overs.",
+      "Only wooden bats allowed (no plastic or fiber bats)."
+    ],
+    schedule: "January 23, 11:30 AM Onwards",
+    coordinators: "Sarthak (+91 9619267166)"
+  },
+  {
+    id: "basketball",
+    name: "Basketball (Boys)",
+    category: "Outdoor Sport",
+    fee: "₹700",
+    prize1: "₹4000",
+    prize2: "₹2000",
+    teamSize: "4 players (3 on-court + 1 substitute)",
+    rules: [
+      "Match Format: Half-court setup with one basket.",
+      "First team to reach 21 points or lead after 10 minutes wins.",
+      "Proper basketball kit and shoes are mandatory.",
+      "Possession changes after every scored basket.",
+      "Points system follows FIBA rules."
+    ],
+    schedule: "January 23, 11:30 AM Onwards",
+    coordinators: "Sunny (+91 7276622005)"
+  },
+  {
+    id: "tug-of-war",
+    name: "Tug of War (Boys)",
+    category: "Outdoor Sport",
+    fee: "₹500",
+    prize1: "₹3000",
+    teamSize: "5 players",
+    rules: [
+      "Format: Best of 3 pulls.",
+      "Total Weight Limit: 350 kg.",
+      "Players must wear sports shoes and proper attire.",
+      "Gloves and Tapes allowed for better grip.",
+      "Rules as per Standard Tug of War Association."
+    ],
+    schedule: "January 23, 11:30 AM Onwards",
+    coordinators: "Sarthak (+91 9619267166)"
+  },
+
+  // INDOOR SPORTS
+  {
+    id: "benchpress",
+    name: "Benchpress (Boys)",
+    category: "Indoor Sport",
+    fee: "₹200",
+    prize1: "₹1000",
+    prize2: "₹500",
+    rules: [
+      "Categories: Under 55 kg | Under 65 kg | Open.",
+      "3 attempts to perform the lift.",
+      "Clear single complete repetition counts. Bar must move parallel.",
+      "Feet must remain flat on the ground. Gloves not allowed."
+    ],
+    schedule: "January 22, 11:30 AM - 1:00 PM (Gymkhana)",
+    coordinators: "Vedant (+91 7666328626)"
+  },
+  {
+    id: "deadlift",
+    name: "Deadlift (Boys)",
+    category: "Indoor Sport",
+    fee: "₹200",
+    prize1: "₹1000",
+    prize2: "₹500",
+    rules: [
+      "Categories: Under 55 kg | Under 65 kg | Open.",
+      "3 attempts; best successful lift considered.",
+      "Lift completed with straight, locked knees & hips, shoulders back at top.",
+      "No downward motion allowed before the 'Down' command.",
+      "Chalk & lifting belt allowed; straps & gloves prohibited."
+    ],
+    schedule: "January 22, 1:30 PM - 3:30 PM (Gymkhana)",
+    coordinators: "Vedant (+91 7666328626)"
+  },
+  {
+    id: "carrom",
+    name: "Carrom",
+    category: "Indoor Sport",
+    fee: "₹200",
+    prize1: "₹1000",
+    prize2: "₹500",
+    rules: [
+      "Categories: Singles and Doubles.",
+      "Matches follow Standard Carrom Federation Rules."
+    ],
+    schedule: "January 23, 11:30 AM - 2:30 PM",
+    coordinators: "Vedant (+91 7666328626)"
+  },
+  {
+    id: "chess-indoor",
+    name: "Chess (Indoor)",
+    category: "Indoor Sport",
+    fee: "₹200",
+    prize1: "₹2000",
+    prize2: "₹1000",
+    rules: [
+      "Category: Individual (Solo) OPEN.",
+      "Match Time: 15 minutes per player.",
+      "Matches follow Standard FIDE Rules."
+    ],
+    schedule: "January 23, 11:30 AM - 12:30 PM",
+    coordinators: "Vedant (+91 7666328626)"
+  },
+  {
+    id: "table-tennis",
+    name: "Table Tennis",
+    category: "Indoor Sport",
+    fee: "₹200",
+    prize1: "₹1500",
+    prize2: "₹750",
+    rules: [
+      "Format: Best of 3 games, each played to 11 points.",
+      "Service alternates every 2 points.",
+      "Matches follow Standard Table Tennis Federation Rules."
+    ],
+    schedule: "January 23, 11:30 AM - 1:00 PM (Gymkhana)",
+    coordinators: "Vedant (+91 7666328626)"
+  },
+  {
+    id: "treasure-hunt",
+    name: "Treasure Hunt",
+    category: "Indoor Sport",
+    fee: "₹500",
+    prize1: "₹3000",
+    teamSize: "5 members",
+    rules: [
+      "Clues scattered across campus. Each clue contains a riddle.",
+      "Participants must not share clues.",
+      "Damaging, tearing, or misplacing any clue leads to disqualification.",
+      "No interfering with other teams."
+    ],
+    schedule: "January 23, 11:00 AM - 4:00 PM (All Campus)",
+    coordinators: "Vedant (+91 7666328626)"
+  },
+
+  // E-SPORTS
+  {
+    id: "valorant",
+    name: "Valorant (PC)",
+    category: "E-Sports",
+    fee: "₹500",
+    prize1: "₹5000",
+    prize2: "₹3000",
+    teamSize: "5 players",
+    rules: [
+      "Game Mode: Competitive.",
+      "Map selection and side choice decided by coordinators.",
+      "Hacks, scripts, or external assists lead to instant ban."
+    ],
+    schedule: "January 21, 6:30 PM Onwards (Online)",
+    coordinators: "Parikshit (+91 9975347607)"
+  },
+  {
+    id: "cs2",
+    name: "Counter-Strike 2",
+    category: "E-Sports",
+    fee: "₹200",
+    prize1: "₹2000",
+    prize2: "₹1000",
+    teamSize: "5 players",
+    rules: [
+      "Game Mode: Competitive.",
+      "Map selection and side choice decided by coordinators.",
+      "Standard competitive tournament rules apply."
+    ],
+    schedule: "January 22, 6:30 PM Onwards (Online)",
+    coordinators: "Parikshit (+91 9975347607)"
+  },
+  {
+    id: "chess-online",
+    name: "Chess Online",
+    category: "E-Sports",
+    fee: "₹100",
+    prize1: "₹1000",
+    prize2: "₹500",
+    rules: [
+      "Played on chess.com.",
+      "Time Control: 10 minutes (Rapid).",
+      "Strict anti-cheat protocols. No external engine assistance."
+    ],
+    schedule: "January 23, 10:30 AM - 12:00 PM (Online)",
+    coordinators: "Parikshit (+91 9975347607)"
+  },
+  {
+    id: "freefire",
+    name: "FreeFire Max",
+    category: "E-Sports",
+    fee: "₹200",
+    prize1: "₹2500",
+    prize2: "₹1250",
+    teamSize: "Squad (4 players)",
+    rules: [
+      "Game Mode: Battle Royale.",
+      "Custom rooms monitored by coordinators.",
+      "Emulators strictly prohibited."
+    ],
+    schedule: "January 23, 11:00 AM - 3:00 PM (PHCET Reception)",
+    coordinators: "Parikshit (+91 9975347607)"
+  },
+  {
+    id: "ludo-king",
+    name: "Ludo King",
+    category: "E-Sports",
+    fee: "₹100",
+    prize1: "₹1000",
+    prize2: "₹500",
+    rules: [
+      "Game Mode: Online Match (4-player lobby).",
+      "Standard Ludo King rules apply.",
+      "Screenshots of victory must be submitted to coordinators."
+    ],
+    schedule: "January 23, 12:45 PM - 1:45 PM",
+    coordinators: "Parikshit (+91 9975347607)"
+  },
+  {
+    id: "uno-mobile",
+    name: "UNO Mobile",
+    category: "E-Sports",
+    fee: "₹100",
+    prize1: "₹1000",
+    prize2: "₹500",
+    rules: [
+      "Standard UNO rules. Each player starts with 7 cards.",
+      "Disconnecting intentionally will lead to disqualification.",
+      "No game-delaying tactics."
+    ],
+    schedule: "January 22, 11:30 AM - 12:30 PM",
+    coordinators: "Parikshit (+91 9975347607)"
+  },
+  {
+    id: "game-2048",
+    name: "2048 Mobile",
+    category: "E-Sports",
+    fee: "₹100",
+    prize1: "₹1000",
+    prize2: "₹500",
+    rules: [
+      "Classic 4x4 Grid.",
+      "First to reach 2048 wins.",
+      "No undo option allowed; game ends when no moves are possible."
+    ],
+    schedule: "January 22, 1:00 PM - 2:00 PM",
+    coordinators: "Parikshit (+91 9975347607)"
+  },
+  {
+    id: "stumble-guys",
+    name: "Stumble Guys",
+    category: "E-Sports",
+    fee: "₹100",
+    prize1: "₹1000",
+    prize2: "₹500",
+    rules: [
+      "Online Knockout format.",
+      "Last player standing in the final round wins.",
+      "Standard matchmaking rules."
+    ],
+    schedule: "January 23, 11:00 AM - 1:30 PM",
+    coordinators: "Parikshit (+91 9975347607)"
+  },
+  {
+    id: "eight-ball-pool",
+    name: "8 Ball Pool",
+    category: "E-Sports",
+    fee: "₹100",
+    prize1: "₹1000",
+    prize2: "₹500",
+    rules: [
+      "Game Mode: 1v1 Online Match.",
+      "Standard 8 Ball Pool rules apply."
+    ],
+    schedule: "January 23, 2:00 PM - 3:00 PM",
+    coordinators: "Parikshit (+91 9975347607)"
+  },
+
+  // ARTS
+  {
+    id: "rangoli",
+    name: "Rangoli",
+    category: "Creative Arts",
+    fee: "₹100",
+    prize1: "₹500",
+    prize2: "₹300",
+    rules: [
+      "All art events are individual (solo).",
+      "Participants must bring their own materials.",
+      "Topic announced on the spot.",
+      "Must complete within time limit."
+    ],
+    schedule: "January 22, 11:30 AM - 1:30 PM (3rd Floor PHCOA)",
+    coordinators: "Parikshit (+91 9975347607)"
+  },
+  {
+    id: "mehandi",
+    name: "Mehandi Art",
+    category: "Creative Arts",
+    fee: "₹100",
+    prize1: "₹500",
+    prize2: "₹300",
+    rules: [
+      "Individual (solo) competition.",
+      "Participants must bring their own cones.",
+      "Judging based on neatness, design complexity, and creativity."
+    ],
+    schedule: "January 22, 11:30 AM - 12:30 PM (2nd Floor PHIMSR)",
+    coordinators: "Parikshit (+91 9975347607)"
+  },
+  {
+    id: "glass-painting",
+    name: "Glass Painting",
+    category: "Creative Arts",
+    fee: "₹100",
+    prize1: "₹500",
+    prize2: "₹300",
+    rules: [
+      "Solo competition. Bring your own glass & paints.",
+      "Time limit: 2 hours.",
+      "Themes will be given on the spot."
+    ],
+    schedule: "January 22, 1:30 PM - 3:30 PM (3rd Floor PHCOA)",
+    coordinators: "Parikshit (+91 9975347607)"
+  },
+  {
+    id: "drawing",
+    name: "Drawing & Sketching",
+    category: "Creative Arts",
+    fee: "₹100",
+    prize1: "₹500",
+    prize2: "₹300",
+    rules: [
+      "Drawing papers will be provided.",
+      "Bring your own pencils, colors, and brushes.",
+      "Completed artwork must be submitted within the time limit."
+    ],
+    schedule: "January 23, 10:30 AM - 12:30 PM (7th Floor PHCOA)",
+    coordinators: "Parikshit (+91 9975347607)"
+  },
+  {
+    id: "nail-art",
+    name: "Nail Art",
+    category: "Creative Arts",
+    fee: "₹100",
+    prize1: "₹500",
+    prize2: "₹300",
+    rules: [
+      "Solo competition.",
+      "Bring all nail polish and detailing tools.",
+      "No pre-designed decals allowed."
+    ],
+    schedule: "January 23, 10:30 AM - 12:00 PM (2nd Floor PHIMSR)",
+    coordinators: "Parikshit (+91 9975347607)"
+  },
+  {
+    id: "freestyle-dance",
+    name: "Freestyle Dance Battle",
+    category: "Creative Arts",
+    fee: "₹200",
+    prize1: "₹2000",
+    prize2: "₹1000",
+    rules: [
+      "Team Size: Solo (1 player).",
+      "Each participant will get 1 minute per round to perform.",
+      "Music of different genres will be played on the spot by coordinators.",
+      "Use of accessories/props is permitted."
+    ],
+    schedule: "January 23, 2:30 PM - 4:30 PM (3rd Floor PHCOA)",
+    coordinators: "Parikshit (+91 9975347607)"
+  }
+];
+
 export default function Home() {
   const containerRef = useRef<HTMLDivElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
@@ -141,6 +799,30 @@ export default function Home() {
   const [currentStage, setCurrentStage] = useState(0);
   const [showNavbar, setShowNavbar] = useState(true);
   const [lastScrollY, setLastScrollY] = useState(0);
+
+  // Interactive UI States for Pillai Euforia
+  const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
+  const [selectedEvent, setSelectedEvent] = useState<any | null>(null);
+  const [showRegistration, setShowRegistration] = useState(false);
+  const [regForm, setRegForm] = useState({ name: "", phone: "", college: "", age: "" });
+  const [regSubmitted, setRegSubmitted] = useState(false);
+  const [sportsTab, setSportsTab] = useState<string>("outdoor");
+  const [showCategories, setShowCategories] = useState(false);
+  const [showRegForm, setShowRegForm] = useState(false);
+
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    const { name, value } = e.target;
+    setRegForm((prev) => ({ ...prev, [name]: value }));
+  };
+
+  const handleRegisterSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!regForm.name || !regForm.phone || !regForm.college || !regForm.age) {
+      alert("Please fill all fields!");
+      return;
+    }
+    setRegSubmitted(true);
+  };
 
   // Refs for tracking animation variables inside the rAF loop (to bypass react render lag)
   const scrollInfo = useRef({
@@ -480,12 +1162,12 @@ export default function Home() {
               >
                 <p className="text-[11px] font-mono text-teal-400/80 tracking-widest uppercase animate-pulse">
                   {loadPercentage < 25 && "Initializing holographic matrix..."}
-                  {loadPercentage >= 25 && loadPercentage < 55 && "Mapping stone structures..."}
-                  {loadPercentage >= 55 && loadPercentage < 85 && "Calibrating core energy fields..."}
-                  {loadPercentage >= 85 && "Welcome to Pillai Euforia..."}
+                  {loadPercentage >= 25 && loadPercentage < 55 && "Mapping stage coordinates..."}
+                  {loadPercentage >= 55 && loadPercentage < 85 && "Synchronizing event database..."}
+                  {loadPercentage >= 85 && "Welcome to Pillai Euforia 2026..."}
                 </p>
                 <p className="text-[9px] font-mono text-neutral-600 mt-1 uppercase">
-                  Data Stream: SECURE_CORE_ALGN_V{loadPercentage}.99
+                  Data Stream: EUFORIA_INIT_V{loadPercentage}.99
                 </p>
               </motion.div>
               
@@ -521,15 +1203,15 @@ export default function Home() {
           </button>
           <span className="text-white/10 select-none">•</span>
           <button onClick={() => scrollToStage(1)} className="hover:text-teal-400 px-3 py-1 rounded-full transition-colors cursor-pointer">
-            DECONSTRUCT
+            STAGE EVENTS
           </button>
           <span className="text-white/10 select-none">•</span>
           <button onClick={() => scrollToStage(2)} className="hover:text-teal-400 px-3 py-1 rounded-full transition-colors cursor-pointer">
-            THE CORE
+            SPORTS & ARTS
           </button>
           <span className="text-white/10 select-none">•</span>
           <button onClick={() => scrollToStage(3)} className="hover:text-teal-400 px-3 py-1 rounded-full transition-colors cursor-pointer">
-            CT SYSTEM
+            REGISTRATION
           </button>
         </div>
 
@@ -557,7 +1239,7 @@ export default function Home() {
             onClick={() => scrollToStage(3)}
             className="relative px-5 py-2 rounded-full text-xs font-mono tracking-widest text-white border border-teal-500/30 overflow-hidden bg-teal-500/5 hover:bg-teal-500/10 transition-all hover:border-teal-400 hover:shadow-[0_0_20px_rgba(45,212,191,0.25)] cursor-pointer"
           >
-            ENTER THE TEMPLE
+            REGISTER NOW
           </button>
         </div>
       </motion.nav>
@@ -581,10 +1263,10 @@ export default function Home() {
               className="group flex items-center justify-end relative py-1 cursor-pointer focus:outline-none"
             >
               <span className="absolute right-8 text-[9px] font-mono tracking-widest text-teal-400 opacity-0 group-hover:opacity-100 transition-all duration-300 translate-x-2 group-hover:translate-x-0 pointer-events-none select-none uppercase">
-                {idx === 0 && "01 // ORIGIN"}
-                {idx === 1 && "02 // ANOMALY"}
-                {idx === 2 && "03 // ACTIVATION"}
-                {idx === 3 && "04 // CONVERGENCE"}
+                {idx === 0 && "01 // OVERVIEW"}
+                {idx === 1 && "02 // STAGE EVENTS"}
+                {idx === 2 && "03 // SPORTS & ARTS"}
+                {idx === 3 && "04 // REGISTRATION"}
               </span>
               <div
                 className={`w-2.5 h-2.5 rounded-full border transition-all duration-300 ${
@@ -616,23 +1298,46 @@ export default function Home() {
           <div className="max-w-3xl flex flex-col space-y-4">
             <div className="flex items-center space-x-3 text-teal-400 font-mono text-xs tracking-[0.3em]">
               <Compass size={14} className="animate-pulse" />
-              <span>01 // ORIGIN</span>
+              <span>01 // THE LEGACY</span>
             </div>
             
             <h1 className="text-4xl md:text-6xl font-syne font-extrabold tracking-tight text-white leading-[1.1]">
-              The Sentinel of <br />
+              Pillai <br />
               <span className="text-transparent bg-clip-text bg-gradient-to-r from-teal-400 to-emerald-400 glow-teal">
-                the Euforia Canopy
+                Euforia 2026
               </span>
             </h1>
-            
-            <p className="text-sm md:text-base font-sans text-neutral-400 leading-relaxed max-w-xl">
-              For millennia, a colossal monolith lay dormant beneath equatorial layers. An impenetrable architecture of unknown composite stone, emitting an electric trace humming in harmony with the surrounding ancient root networks.
+            <p className="text-xs md:text-sm font-mono text-teal-400/80 tracking-[0.2em] uppercase">
+              A Decade of Celebration Redefined
             </p>
             
-            <div className="pt-6 flex items-center space-x-4">
+            <p className="text-xs md:text-sm font-sans text-neutral-400 leading-relaxed max-w-xl">
+              Marking its 10th anniversary, Pillai Euforia stands as Maharashtra's most anticipated college festival. Under the vision of Mahatma Education Society's Pillai Group of Institutions, we bring together over 60+ competitive events across music, sports, technology, and art.
+            </p>
+            
+            {/* Stats Grid */}
+            <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 max-w-2xl pt-4">
+              <div className="glass-panel p-3 rounded-xl border border-white/[0.03]">
+                <span className="text-xl md:text-2xl font-bold font-syne text-white block glow-teal-text">10k+</span>
+                <span className="text-[10px] font-mono text-neutral-500 uppercase tracking-wider">Footfall</span>
+              </div>
+              <div className="glass-panel p-3 rounded-xl border border-white/[0.03]">
+                <span className="text-xl md:text-2xl font-bold font-syne text-white block glow-teal-text">1,000+</span>
+                <span className="text-[10px] font-mono text-neutral-500 uppercase tracking-wider">Participants</span>
+              </div>
+              <div className="glass-panel p-3 rounded-xl border border-white/[0.03]">
+                <span className="text-xl md:text-2xl font-bold font-syne text-white block glow-teal-text">60+</span>
+                <span className="text-[10px] font-mono text-neutral-500 uppercase tracking-wider">Competitions</span>
+              </div>
+              <div className="glass-panel p-3 rounded-xl border border-white/[0.03]">
+                <span className="text-xl md:text-2xl font-bold font-syne text-white block glow-teal-text">₹1.5L+</span>
+                <span className="text-[10px] font-mono text-neutral-500 uppercase tracking-wider">Prize Pool</span>
+              </div>
+            </div>
+
+            <div className="pt-4 flex items-center space-x-4">
               <span className="text-[10px] font-mono text-teal-500/60 tracking-widest uppercase animate-pulse">
-                SCROLL TO INITIATE DECONSTRUCT SEQUENCE
+                SCROLL TO DECONSTRUCT STAGE EVENTS
               </span>
               <ChevronDown size={14} className="text-teal-400 animate-bounce" />
             </div>
@@ -641,109 +1346,464 @@ export default function Home() {
 
         {/* SECTION 2: Exploding structure / Anomaly (scroll progress ~25% to ~55%) */}
         <ScrollSection scrollYProgress={scrollYProgress} start={0.28} end={0.48}>
-          <div className="w-full flex flex-col md:flex-row md:items-end justify-between gap-8 md:gap-16">
-            <div className="max-w-xl flex flex-col space-y-4">
+          <div className="w-full flex flex-col space-y-6">
+            <div className="max-w-xl flex flex-col space-y-2">
               <div className="flex items-center space-x-3 text-teal-400 font-mono text-xs tracking-[0.3em]">
                 <Layers size={14} />
-                <span>02 // ANOMALY</span>
+                <span>02 // THE MAIN STAGE</span>
               </div>
               
               <h2 className="text-3xl md:text-5xl font-syne font-bold tracking-tight text-white leading-tight">
-                Architectural <br />
+                Stage <br />
                 <span className="text-transparent bg-clip-text bg-gradient-to-r from-teal-400 to-teal-200">
-                  Deconstruction
+                  Performances
                 </span>
               </h2>
               
-              <p className="text-sm md:text-base font-sans text-neutral-400 leading-relaxed">
-                As the planetary alignment reaches geometric zenith, the locking seals release. Slabs of massive structural masonry detach, floating in zero-gravity magnetic alignment to expose a flawless internal schematic map.
+              <p className="text-xs md:text-sm font-sans text-neutral-400 leading-relaxed">
+                Witness spectacular talent on January 22nd and 23rd. Click any card below to view detailed guidelines, registration fees, prize structures, and coordinators.
               </p>
             </div>
             
-            <div className="glass-panel p-6 rounded-2xl max-w-xs flex flex-col space-y-3 font-mono text-[10px] text-neutral-500 border border-white/[0.04] self-start md:self-auto">
-              <div className="flex justify-between items-center text-teal-400 border-b border-white/5 pb-2">
-                <span className="font-bold">GRID SCHEMATIC</span>
-                <span className="animate-pulse flex h-1.5 w-1.5 rounded-full bg-teal-400" />
-              </div>
-              <div className="flex justify-between">
-                <span>SEAL TYPE:</span>
-                <span className="text-white">VOLUMETRIC ROTATIONAL</span>
-              </div>
-              <div className="flex justify-between">
-                <span>STABILITY INDEX:</span>
-                <span className="text-emerald-400">99.41% // SYNC</span>
-              </div>
-              <div className="flex justify-between">
-                <span>ELEVATION:</span>
-                <span className="text-white">EXPLODED PARALLAX</span>
-              </div>
+            {/* Stage Events Grid */}
+            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3 max-h-[48vh] overflow-y-auto pr-2 custom-scrollbar">
+              {EVENTS_DATA.filter(ev => ev.category === "Stage Event").map((ev) => (
+                <div
+                  key={ev.id}
+                  onClick={() => setSelectedEvent(ev)}
+                  className="glass-panel p-4 rounded-2xl border border-white/[0.04] bg-white/[0.01] hover:bg-white/[0.04] hover:border-teal-500/30 hover:-translate-y-1 transition-all duration-300 cursor-pointer flex flex-col justify-between text-left group"
+                >
+                  <div>
+                    <div className="flex justify-between items-start mb-2">
+                      <Music size={14} className="text-teal-400/70 group-hover:text-teal-400 transition-colors" />
+                      <span className="text-[9px] font-mono text-neutral-500 uppercase tracking-widest">Stage</span>
+                    </div>
+                    <h3 className="font-syne font-bold text-white text-xs md:text-sm line-clamp-1 group-hover:text-teal-300 transition-colors">
+                      {ev.name}
+                    </h3>
+                  </div>
+                  <div className="mt-4 pt-2 border-t border-white/5 flex justify-between items-center text-[10px] font-mono">
+                    <span className="text-neutral-500">FEE:</span>
+                    <span className="text-teal-400 font-bold">{ev.fee}</span>
+                  </div>
+                </div>
+              ))}
+            </div>
+
+            {/* General Guidelines Banner */}
+            <div className="glass-panel p-3 rounded-xl border border-white/[0.03] text-left max-w-3xl flex items-center space-x-3 text-[10px] text-neutral-500 font-mono">
+              <Info size={14} className="text-teal-400 shrink-0" />
+              <span>Reporting: All stage entries must report 1 hour prior. Obscenity/vulgarity in costumes or music is strictly banned.</span>
             </div>
           </div>
         </ScrollSection>
 
         {/* SECTION 3: The Glowing core / Activation (scroll progress ~55% to ~80%) */}
         <ScrollSection scrollYProgress={scrollYProgress} start={0.58} end={0.78}>
-          <div className="max-w-3xl ml-auto text-right flex flex-col items-end space-y-4">
-            <div className="flex items-center space-x-3 text-teal-400 font-mono text-xs tracking-[0.3em]">
-              <span>03 // ACTIVATION</span>
-              <Activity size={14} className="animate-[pulse_1s_infinite]" />
+          <div className="w-full flex flex-col space-y-6">
+            <div className="max-w-xl flex flex-col space-y-2 text-left self-start">
+              <div className="flex items-center space-x-3 text-teal-400 font-mono text-xs tracking-[0.3em]">
+                <Activity size={14} className="animate-[pulse_1.5s_infinite]" />
+                <span>03 // THE ARENA</span>
+              </div>
+              
+              <h2 className="text-3xl md:text-5xl font-syne font-bold tracking-tight text-white leading-tight">
+                Sports, Esports <br />
+                <span className="text-transparent bg-clip-text bg-gradient-to-r from-teal-400 to-cyan-300 glow-teal">
+                  & Creative Arts
+                </span>
+              </h2>
             </div>
-            
-            <h2 className="text-3xl md:text-5xl font-syne font-bold tracking-tight text-white leading-tight">
-              The Mystical <br />
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-teal-400 to-cyan-300 glow-teal">
-                Glowing Core
-              </span>
-            </h2>
-            
-            <p className="text-sm md:text-base font-sans text-neutral-400 leading-relaxed max-w-xl">
-              Deep within the exploded vaults of stone sits the Euforia Core. A reactor chamber of concentrated light channels, drawing bio-electric currents from the Earth. Volumetric light cones pierce the forest dust, signaling the active core matrix.
-            </p>
-            
-            <div className="flex items-center space-x-2 text-[10px] font-mono text-teal-500/60 uppercase">
-              <span>FREQUENCY SHIFT REACHING MAX</span>
-              <div className="w-1.5 h-1.5 rounded-full bg-teal-400 animate-ping" />
+
+            {/* Tab Controls */}
+            <div className="flex flex-wrap gap-2 border-b border-white/5 pb-2 font-mono text-[10px] md:text-xs">
+              {(["outdoor", "indoor", "esports", "arts"] as const).map((tab) => (
+                <button
+                  key={tab}
+                  onClick={() => setSportsTab(tab)}
+                  className={`px-4 py-1.5 rounded-full border transition-all cursor-pointer uppercase tracking-widest ${
+                    sportsTab === tab
+                      ? "bg-teal-500/10 border-teal-400 text-teal-400 shadow-[0_0_15px_rgba(45,212,191,0.2)]"
+                      : "border-neutral-800 text-neutral-400 hover:border-neutral-600 hover:text-white"
+                  }`}
+                >
+                  {tab === "outdoor" && "Outdoor Sports"}
+                  {tab === "indoor" && "Indoor Sports"}
+                  {tab === "esports" && "E-Sports Arena"}
+                  {tab === "arts" && "Creative Arts"}
+                </button>
+              ))}
+            </div>
+
+            {/* Tab Content Grid */}
+            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3 max-h-[44vh] overflow-y-auto pr-2 custom-scrollbar">
+              {EVENTS_DATA.filter((ev) => {
+                if (sportsTab === "outdoor") return ev.category === "Outdoor Sport";
+                if (sportsTab === "indoor") return ev.category === "Indoor Sport";
+                if (sportsTab === "esports") return ev.category === "E-Sports";
+                return ev.category === "Creative Arts";
+              }).map((ev) => (
+                <div
+                  key={ev.id}
+                  onClick={() => setSelectedEvent(ev)}
+                  className="glass-panel p-4 rounded-2xl border border-white/[0.04] bg-white/[0.01] hover:bg-white/[0.04] hover:border-teal-500/30 hover:-translate-y-1 transition-all duration-300 cursor-pointer flex flex-col justify-between text-left group"
+                >
+                  <div>
+                    <div className="flex justify-between items-start mb-2">
+                      {sportsTab === "outdoor" && <CircleDot size={14} className="text-teal-400/70 group-hover:text-teal-400 transition-colors" />}
+                      {sportsTab === "indoor" && <Award size={14} className="text-teal-400/70 group-hover:text-teal-400 transition-colors" />}
+                      {sportsTab === "esports" && <Gamepad2 size={14} className="text-teal-400/70 group-hover:text-teal-400 transition-colors" />}
+                      {sportsTab === "arts" && <Palette size={14} className="text-teal-400/70 group-hover:text-teal-400 transition-colors" />}
+                      <span className="text-[9px] font-mono text-neutral-500 uppercase tracking-widest">{sportsTab}</span>
+                    </div>
+                    <h3 className="font-syne font-bold text-white text-xs md:text-sm line-clamp-1 group-hover:text-teal-300 transition-colors">
+                      {ev.name}
+                    </h3>
+                  </div>
+                  <div className="mt-4 pt-2 border-t border-white/5 flex justify-between items-center text-[10px] font-mono">
+                    <span className="text-neutral-500">FEE:</span>
+                    <span className="text-teal-400 font-bold">{ev.fee}</span>
+                  </div>
+                </div>
+              ))}
             </div>
           </div>
         </ScrollSection>
 
         {/* SECTION 4: Reassembly & Synthesis (scroll progress ~80% to ~100%) */}
         <ScrollSection scrollYProgress={scrollYProgress} start={0.84} end={1.0} keepVisible>
-          <div className="max-w-2xl mx-auto text-center flex flex-col items-center space-y-6">
+          <div className="w-full flex flex-col space-y-6 text-center items-center">
             <div className="flex items-center space-x-3 text-teal-400 font-mono text-xs tracking-[0.3em]">
               <HelpCircle size={14} />
-              <span>04 // CONVERGENCE</span>
+              <span>04 // REGISTRATION & SYSTEM</span>
             </div>
             
             <h2 className="text-4xl md:text-6xl font-syne font-extrabold tracking-tight text-white leading-none">
-              Reassembled <br />
+              Register <br />
               <span className="text-transparent bg-clip-text bg-gradient-to-r from-teal-400 to-emerald-400 glow-teal">
-                Dormancy
+                Your Entry
               </span>
             </h2>
             
-            <p className="text-sm md:text-base font-sans text-neutral-400 leading-relaxed max-w-lg">
-              The segments re-align, sliding back into eternal stonemasonry geometry. The core’s light settles back into deep conduits. The structure sleeps once more, but the threshold is unlocked.
+            <p className="text-xs md:text-sm font-sans text-neutral-400 leading-relaxed max-w-lg">
+              Registration requires entry receipts. Complete registration by coordinating with our registration committee heads or event leads on WhatsApp.
             </p>
+
+            {/* Core Contacts Grid */}
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-3 max-w-4xl w-full text-left">
+              <div className="glass-panel p-3 rounded-xl border border-white/[0.03] bg-white/[0.01]">
+                <span className="text-[9px] font-mono text-teal-400 block tracking-widest uppercase">General Registration</span>
+                <span className="font-syne font-bold text-xs text-white block mt-1">Shravani (Head)</span>
+                <span className="text-[9px] font-mono text-neutral-500">+91 8390575631</span>
+              </div>
+              <div className="glass-panel p-3 rounded-xl border border-white/[0.03] bg-white/[0.01]">
+                <span className="text-[9px] font-mono text-teal-400 block tracking-widest uppercase">General Registration</span>
+                <span className="font-syne font-bold text-xs text-white block mt-1">Sujal (Head)</span>
+                <span className="text-[9px] font-mono text-neutral-500">+91 9594518516</span>
+              </div>
+              <div className="glass-panel p-3 rounded-xl border border-white/[0.03] bg-white/[0.01]">
+                <span className="text-[9px] font-mono text-teal-400 block tracking-widest uppercase">Registration Joint</span>
+                <span className="font-syne font-bold text-xs text-white block mt-1">Sarah (Joint)</span>
+                <span className="text-[9px] font-mono text-neutral-500">+91 8087493835</span>
+              </div>
+              <div className="glass-panel p-3 rounded-xl border border-white/[0.03] bg-white/[0.01]">
+                <span className="text-[9px] font-mono text-teal-400 block tracking-widest uppercase">Registration Joint</span>
+                <span className="font-syne font-bold text-xs text-white block mt-1">Harsh (Joint)</span>
+                <span className="text-[9px] font-mono text-neutral-500">+91 7738668433</span>
+              </div>
+            </div>
             
-            <motion.div
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.98 }}
-              className="pt-4"
-            >
-              <button
-                onClick={() => {
-                  alert("Welcome to Pillai Euforia");
-                }}
-                className="px-8 py-4 rounded-full text-sm font-syne font-bold tracking-widest text-[#050505] bg-teal-400 hover:bg-teal-300 hover:shadow-[0_0_30px_rgba(45,212,191,0.6)] transition-all cursor-pointer"
+            <div className="pt-2 flex flex-col sm:flex-row items-center gap-4">
+              <a
+                href="https://wa.me/918390575631?text=Hi%20Shravani,%20I%20want%20to%20register%20for%20Pillai%20Euforia%202026.%20Please%20send%20details."
+                target="_blank"
+                rel="noopener noreferrer"
+                className="px-8 py-3.5 rounded-full text-xs font-syne font-bold tracking-widest text-[#050505] bg-teal-400 hover:bg-teal-300 hover:shadow-[0_0_30px_rgba(45,212,191,0.6)] transition-all cursor-pointer flex items-center space-x-2"
               >
-                ENTER THE CORE
-              </button>
-            </motion.div>
+                <MessageSquare size={14} />
+                <span>CONNECT WITH REGISTRATION HEAD</span>
+              </a>
+              
+              <a
+                href="https://instagram.com/pillaieuforia"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="px-6 py-3 rounded-full text-xs font-mono tracking-wider text-white border border-white/10 hover:border-teal-500/30 hover:bg-white/5 transition-all cursor-pointer flex items-center space-x-2"
+              >
+                <span>FOLLOW @PILLAIEUFORIA</span>
+                <ExternalLink size={12} className="text-teal-400" />
+              </a>
+            </div>
           </div>
         </ScrollSection>
 
       </div>
+
+      {/* Event Details Modal */}
+      <AnimatePresence>
+        {selectedEvent && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/85 backdrop-blur-md"
+            onClick={() => {
+              setSelectedEvent(null);
+              setShowRegForm(false);
+              setRegSubmitted(false);
+              setRegForm({ name: "", phone: "", college: "", age: "" });
+            }}
+          >
+            <motion.div
+              initial={{ scale: 0.95, y: 20 }}
+              animate={{ scale: 1, y: 0 }}
+              exit={{ scale: 0.95, y: 20 }}
+              transition={{ type: "spring", duration: 0.5 }}
+              className="relative w-full max-w-lg glass-panel p-6 md:p-8 rounded-3xl border border-teal-500/30 bg-black/95 shadow-[0_0_50px_rgba(20,184,166,0.15)] overflow-hidden text-left"
+              onClick={(e) => e.stopPropagation()}
+            >
+              {/* Holographic background line */}
+              <div className="absolute inset-x-0 top-0 h-[2px] bg-gradient-to-r from-transparent via-teal-500 to-transparent shadow-[0_0_20px_rgba(20,184,166,0.5)]" />
+              
+              <button
+                onClick={() => {
+                  setSelectedEvent(null);
+                  setShowRegForm(false);
+                  setRegSubmitted(false);
+                  setRegForm({ name: "", phone: "", college: "", age: "" });
+                }}
+                className="absolute top-4 right-4 text-neutral-400 hover:text-white transition-colors cursor-pointer"
+              >
+                <X size={20} />
+              </button>
+
+              <AnimatePresence mode="wait">
+                {/* SUCCESS SCREEN */}
+                {regSubmitted ? (
+                  <motion.div
+                    key="success"
+                    initial={{ opacity: 0, scale: 0.95 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    exit={{ opacity: 0, scale: 0.95 }}
+                    className="space-y-5 text-center py-4"
+                  >
+                    <span className="text-4xl block">🌿</span>
+                    <h3 className="text-2xl font-syne font-bold text-teal-400 glow-teal-text">
+                      Registration Successful!
+                    </h3>
+                    <p className="text-sm font-sans text-neutral-400 leading-relaxed">
+                      Thank you, <strong className="text-white">{regForm.name}</strong>. Your registration for <strong className="text-teal-300">{selectedEvent.name}</strong> has been logged.
+                    </p>
+
+                    <div className="bg-teal-500/5 border border-teal-500/10 rounded-2xl p-4 text-left font-mono text-xs text-neutral-400 space-y-2">
+                      <div><strong className="text-white">College:</strong> {regForm.college}</div>
+                      <div><strong className="text-white">WhatsApp:</strong> {regForm.phone}</div>
+                      <div><strong className="text-white">Entry Fee:</strong> {selectedEvent.fee}</div>
+                    </div>
+
+                    <p className="text-xs font-mono text-neutral-500">
+                      To complete your registration, tap the button below to confirm with our team on WhatsApp.
+                    </p>
+
+                    <a
+                      href={`https://wa.me/918390575631?text=${encodeURIComponent(`Hi, I just registered for ${selectedEvent.name} at Pillai Euforia 2026. Details:\n- Name: ${regForm.name}\n- College: ${regForm.college}\n- Phone: ${regForm.phone}\n- Age: ${regForm.age}\n- Event: ${selectedEvent.name}`)}`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="w-full py-3.5 rounded-full text-xs font-syne font-bold tracking-widest text-[#050505] bg-teal-400 hover:bg-teal-300 hover:shadow-[0_0_20px_rgba(45,212,191,0.5)] transition-all flex items-center justify-center space-x-2 cursor-pointer"
+                    >
+                      <MessageSquare size={14} />
+                      <span>Confirm on WhatsApp</span>
+                    </a>
+                  </motion.div>
+                ) : showRegForm ? (
+                  /* REGISTRATION FORM */
+                  <motion.form
+                    key="form"
+                    onSubmit={handleRegisterSubmit}
+                    initial={{ opacity: 0, x: 20 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    exit={{ opacity: 0, x: -20 }}
+                    className="space-y-4"
+                  >
+                    <div>
+                      <span className="text-[9px] font-mono tracking-widest text-teal-400 uppercase font-semibold">
+                        Registration Form
+                      </span>
+                      <h3 className="text-xl font-syne font-bold text-white mt-1">
+                        Register for {selectedEvent.name}
+                      </h3>
+                    </div>
+
+                    <div className="space-y-3">
+                      <div>
+                        <label className="block text-[10px] font-mono text-neutral-500 uppercase tracking-wider mb-1">
+                          Full Name
+                        </label>
+                        <input
+                          type="text"
+                          name="name"
+                          value={regForm.name}
+                          onChange={handleInputChange}
+                          required
+                          className="w-full bg-white/[0.02] border border-white/10 rounded-xl px-4 py-2.5 text-xs text-white placeholder-neutral-600 outline-none focus:border-teal-500/50 transition-colors"
+                          placeholder="Enter your full name"
+                        />
+                      </div>
+                      <div>
+                        <label className="block text-[10px] font-mono text-neutral-500 uppercase tracking-wider mb-1">
+                          WhatsApp Number
+                        </label>
+                        <input
+                          type="tel"
+                          name="phone"
+                          value={regForm.phone}
+                          onChange={handleInputChange}
+                          required
+                          pattern="[0-9]{10}"
+                          className="w-full bg-white/[0.02] border border-white/10 rounded-xl px-4 py-2.5 text-xs text-white placeholder-neutral-600 outline-none focus:border-teal-500/50 transition-colors"
+                          placeholder="10-digit mobile number"
+                        />
+                      </div>
+                      <div>
+                        <label className="block text-[10px] font-mono text-neutral-500 uppercase tracking-wider mb-1">
+                          College Name
+                        </label>
+                        <input
+                          type="text"
+                          name="college"
+                          value={regForm.college}
+                          onChange={handleInputChange}
+                          required
+                          className="w-full bg-white/[0.02] border border-white/10 rounded-xl px-4 py-2.5 text-xs text-white placeholder-neutral-600 outline-none focus:border-teal-500/50 transition-colors"
+                          placeholder="Your college name"
+                        />
+                      </div>
+                      <div>
+                        <label className="block text-[10px] font-mono text-neutral-500 uppercase tracking-wider mb-1">
+                          Age
+                        </label>
+                        <input
+                          type="number"
+                          name="age"
+                          value={regForm.age}
+                          onChange={handleInputChange}
+                          required
+                          min="15"
+                          max="30"
+                          className="w-full bg-white/[0.02] border border-white/10 rounded-xl px-4 py-2.5 text-xs text-white placeholder-neutral-600 outline-none focus:border-teal-500/50 transition-colors"
+                          placeholder="Your age"
+                        />
+                      </div>
+                    </div>
+
+                    <div className="flex space-x-2 pt-2">
+                      <button
+                        type="button"
+                        onClick={() => setShowRegForm(false)}
+                        className="w-1/3 py-2.5 rounded-xl border border-white/10 hover:bg-white/5 text-xs font-mono text-white transition-colors cursor-pointer"
+                      >
+                        Cancel
+                      </button>
+                      <button
+                        type="submit"
+                        className="w-2/3 py-2.5 rounded-xl text-xs font-syne font-bold tracking-wider text-[#050505] bg-teal-400 hover:bg-teal-300 transition-colors cursor-pointer"
+                      >
+                        Register Now
+                      </button>
+                    </div>
+                  </motion.form>
+                ) : (
+                  /* DETAILS VIEW */
+                  <motion.div
+                    key="details"
+                    initial={{ opacity: 0, x: -20 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    exit={{ opacity: 0, x: 20 }}
+                    className="space-y-5"
+                  >
+                    <div>
+                      <span className="text-[9px] font-mono tracking-widest text-teal-400 uppercase font-semibold">
+                        {selectedEvent.category}
+                      </span>
+                      <h3 className="text-xl md:text-2xl font-syne font-bold text-white mt-1 glow-teal-text">
+                        {selectedEvent.name}
+                      </h3>
+                    </div>
+
+                    <div className="grid grid-cols-2 gap-4 border-y border-white/5 py-4 font-mono text-[11px]">
+                      <div className="space-y-1">
+                        <span className="text-neutral-500 block uppercase tracking-wider">Entry Fee</span>
+                        <span className="text-white font-bold flex items-center space-x-1.5">
+                          <Trophy size={11} className="text-amber-400" />
+                          <span>{selectedEvent.fee}</span>
+                        </span>
+                      </div>
+                      <div className="space-y-1">
+                        <span className="text-neutral-500 block uppercase tracking-wider">Prize Pool</span>
+                        <span className="text-emerald-400 font-bold flex items-center space-x-1.5">
+                          <Award size={11} />
+                          <span>{selectedEvent.prize1} {selectedEvent.prize2 ? `+ ${selectedEvent.prize2}` : ""}</span>
+                        </span>
+                      </div>
+                      <div className="space-y-1 col-span-2">
+                        <span className="text-neutral-500 block uppercase tracking-wider">Schedule & Venue</span>
+                        <span className="text-white flex items-center space-x-1.5">
+                          <Clock size={11} className="text-teal-400" />
+                          <span>{selectedEvent.schedule}</span>
+                        </span>
+                      </div>
+                      {selectedEvent.timeLimit && (
+                        <div className="space-y-1">
+                          <span className="text-neutral-500 block uppercase tracking-wider">Time Limit</span>
+                          <span className="text-white">{selectedEvent.timeLimit}</span>
+                        </div>
+                      )}
+                      {selectedEvent.teamSize && (
+                        <div className="space-y-1">
+                          <span className="text-neutral-500 block uppercase tracking-wider">Team Size</span>
+                          <span className="text-white">{selectedEvent.teamSize}</span>
+                        </div>
+                      )}
+                    </div>
+
+                    <div className="space-y-2">
+                      <h4 className="text-[10px] font-mono font-bold text-teal-400 uppercase tracking-widest flex items-center space-x-1.5">
+                        <Shield size={11} />
+                        <span>Guidelines & Rules</span>
+                      </h4>
+                      <ul className="space-y-1.5 max-h-[140px] overflow-y-auto pr-2 custom-scrollbar text-[11px] text-neutral-400 leading-relaxed list-disc list-inside">
+                        {selectedEvent.rules.map((rule: string, i: number) => (
+                          <li key={i} className="pl-1 text-left">{rule}</li>
+                        ))}
+                      </ul>
+                    </div>
+
+                    {selectedEvent.coordinators && (
+                      <div className="border-t border-white/5 pt-4 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+                        <div className="font-mono text-[10px]">
+                          <span className="text-neutral-500 block uppercase tracking-wider">Coordinator Contact</span>
+                          <span className="text-white flex items-center space-x-1.5 mt-0.5">
+                            <Phone size={11} className="text-teal-500" />
+                            <span>{selectedEvent.coordinators}</span>
+                          </span>
+                        </div>
+                        
+                        <button
+                          onClick={() => setShowRegForm(true)}
+                          className="px-6 py-2.5 rounded-full text-[10px] font-syne font-bold tracking-wider text-[#050505] bg-teal-400 hover:bg-teal-300 hover:shadow-[0_0_20px_rgba(45,212,191,0.5)] transition-all flex items-center justify-center space-x-1.5 cursor-pointer border-none"
+                        >
+                          <MessageSquare size={11} />
+                          <span>Register For Event</span>
+                        </button>
+                      </div>
+                    )}
+                  </motion.div>
+                )}
+              </AnimatePresence>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
 
       {/* Subtle styles that are component specific */}
       <style jsx global>{`
@@ -756,6 +1816,21 @@ export default function Home() {
         @keyframes loading-bar {
           0% { left: -30%; }
           100% { left: 100%; }
+        }
+        .custom-scrollbar::-webkit-scrollbar {
+          width: 4px;
+          height: 4px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+          background: rgba(255, 255, 255, 0.02);
+          border-radius: 4px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+          background: rgba(20, 184, 166, 0.3);
+          border-radius: 4px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+          background: rgba(20, 184, 166, 0.6);
         }
       `}</style>
     </div>

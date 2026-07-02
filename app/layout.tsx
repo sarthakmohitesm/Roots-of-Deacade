@@ -25,8 +25,8 @@ const syne = Syne({
 });
 
 export const metadata: Metadata = {
-  title: "Temple of the Euforia Core — Ancient Mysteries Revealed",
-  description: "An interactive cinematic experience exploring the ancient jungle ruins of the Euforia Core. Discover the deconstructed architectural mystery and primeval energy core.",
+  title: "Pillai Euforia 2026 — A Decade of Celebration Redefined",
+  description: "Maharashtra's ultimate college event. Experience Pillai Euforia 2026, featuring 60+ stage, sports, esports, and arts competitions. Join the legacy.",
 };
 
 export default function RootLayout({
